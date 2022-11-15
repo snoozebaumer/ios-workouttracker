@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct WorkoutTrackerApp: App {
+    @State var exercises: [Exercise] = []
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationView {
+                ExercisesView(exercises: $exercises)
+            }
         }
     }
 }
