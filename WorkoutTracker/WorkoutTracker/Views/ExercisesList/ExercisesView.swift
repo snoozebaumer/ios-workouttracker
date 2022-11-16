@@ -49,6 +49,7 @@ struct ExercisesView: View {
                                                     Button("Add") {
                                                         let exercise = Exercise(data: newExercise)
                                                         exercises.append(exercise)
+                                                        Exercise.save(exercise: exercise)
                                                         isPresentingNewExerciseView = false
                                                         newExercise = Exercise.FormData()
                                                     }

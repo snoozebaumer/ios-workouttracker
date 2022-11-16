@@ -55,6 +55,37 @@ extension Exercise {
 }
 
 extension Exercise {
+    static func save(exercise: Exercise) {
+        guard let url =  URL(string:"http://localhost:3000/exercise")
+        else{
+            return
+        }
+        
+        let encodedData = try! JSONEncoder().encode(exercise)
+        let jsonString = String(data: encodedData, encoding: .utf8)
+        let postString = "exercise=" + jsonString!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.httpBody = postString.data(using: .utf8)
+        
+        URLSession.shared.dataTask(with: request){
+            (data, response, error) in
+            print(response as Any)
+            if let error = error {
+                print(error)
+                return
+            }
+            guard let data = data else{
+                return
+            }
+            print(data, String(data: data, encoding: .utf8) ?? "*unknown encoding*")
+            
+        }.resume()
+    }
+}
+
+extension Exercise {
     static let sampleCategories = [Category(name: "Pecs"), Category(name: "Back"), Category(name: "Lats"), Category(name: "Cardio")]
     static let sampleData = [
         Exercise(title: "Bench Press", category: sampleCategories[0]),

@@ -1,17 +1,47 @@
-import { Request, Response, Application } from "express";
+import {Request, Response, Application} from "express";
 // @ts-ignore
 import express from "express";
+import {Exercise} from "./Models/Exercise";
+import {DbContext} from "./Models/DbContext";
+import * as bodyParser from "body-parser";
 
 const PORT = 3000;
 
 const APP: Application = express();
+APP.use(bodyParser.urlencoded({ extended: true }))
 
-APP.post("/", (req: Request, res: Response): void => {
-  res.status(200).json({
-    message: "This is a test"
-  });
+const db = new DbContext();
+
+APP.post("/exercise", (req: Request, res: Response): void => {
+    let exercise: Exercise = JSON.parse(req.body.exercise);
+    db.save(exercise).then((success) => {
+        if (success) {
+            res.status(200).json({
+                message: "Saved successfully!"
+            });
+        } else {
+            res.status(500).json({
+                message: "An error occurred while saving changes. Please try again later."
+            });
+        }
+    });
+});
+
+APP.put("/exercise/:id", (req: Request, res: Response): void => {
+    let exercise: Exercise = req.body;
+    db.update(exercise).then((success) => {
+        if (success) {
+            res.status(200).json({
+                message: "Saved successfully!"
+            });
+        } else {
+            res.status(500).json({
+                message: "An error occurred while saving changes. Please try again later."
+            });
+        }
+    });
 });
 
 APP.listen(PORT, (): void => {
-  console.log(`Server Running here -> http://localhost:${PORT}`);
+    console.log(`Server Running here -> http://localhost:${PORT}`);
 });
