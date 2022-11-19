@@ -9,9 +9,10 @@ import SwiftUI
 
 struct ExerciseDetailView: View {
     @Binding var exercise: Exercise
-    
     @State private var data = Exercise.FormData()
     @State private var isPresentingEditView = false
+    
+    //same as above to add sets
     
     var body: some View {
         List {
@@ -24,9 +25,15 @@ struct ExerciseDetailView: View {
             }
             Section(header: Text("Sets")) {
                 //TODO: Add Set List
+                Button("New") {
+                    isPresentingEditView = true
+                }
             }
         }
         .navigationTitle(exercise.name)
+        //.sheet --> to add setss
+ 
+        
         .sheet(isPresented: $isPresentingEditView) {
             NavigationView {
                 ExerciseEditView(data: $data)

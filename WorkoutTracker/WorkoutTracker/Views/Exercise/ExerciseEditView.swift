@@ -15,6 +15,7 @@ struct ExerciseEditView: View {
             Section(header: Text("Exercise Details")) {
                 TextField("Name", text: $data.name)
                 TextField("Category", text: $data.categoryName)
+
             }
         }
     }

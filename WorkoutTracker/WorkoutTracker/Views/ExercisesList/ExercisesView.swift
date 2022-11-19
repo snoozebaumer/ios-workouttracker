@@ -22,7 +22,8 @@ struct ExercisesView: View {
         }
         .navigationTitle("Exercises")
         .toolbar {
-            ToolbarItemGroup {
+            //plus button did not show without this placement
+            ToolbarItemGroup(placement: .navigationBarTrailing){
                 Button(action: {
                     // TODO: filter
                 }) {
@@ -32,9 +33,13 @@ struct ExercisesView: View {
                             isPresentingNewExerciseView = true
                         }) {
                             Image(systemName: "plus")
+                        
                     }
+         
+
             }
                 }
+      
         .sheet(isPresented: $isPresentingNewExerciseView) {
             NavigationView {
                 ExerciseEditView(data: $newExercise)
