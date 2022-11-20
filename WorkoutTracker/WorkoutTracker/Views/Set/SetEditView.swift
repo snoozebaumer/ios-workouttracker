@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SetEditView: View {
     //@Binding var data = Set.Data()
-    @State private var data = Set.Data()
+    @Binding var data: Set.FormData
     
     
     
@@ -35,6 +35,6 @@ struct SetEditView: View {
 
 struct SetEditView_Previews: PreviewProvider {
         static var previews: some View {
-            SetEditView()
+            SetEditView(data: .constant(Set.sampleData[0].data))
     }
 }

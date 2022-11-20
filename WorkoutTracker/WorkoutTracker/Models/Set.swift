@@ -23,7 +23,7 @@ struct Set: Identifiable, Codable {
         func convertDateFormatter(date: Date) -> String {
              let date = Date()
              let formatter = DateFormatter()
-             formatter.dateFormat = "dd-MM-yyyy-hh" // change format as per needs
+             formatter.dateFormat = "dd-MM-yyyy-hh-mm" // change format as per needs
              let result = formatter.string(from: date)
              return result
            }
@@ -49,7 +49,51 @@ struct Set: Identifiable, Codable {
     
 }
 
+
 extension Set {
+    init(id: UUID = UUID(), data: FormData) {
+        self.id = id
+        self.name = data.name
+        self.sets = data.sets
+        // TBD 
+        self.strength = true
+        self.metric = true
+        self.excercise = ""
+        
+    }
+    
+    struct Sets: Identifiable, Codable, Hashable {
+        var id: UUID
+        var howmuch: Float
+        var howlong: Float
+        
+        init(id: UUID = UUID(), howmuch: Float, howlong: Float) {
+            self.id = id
+            self.howmuch = howmuch
+            self.howlong = howlong
+            
+        }
+    }
+    
+    struct FormData {
+        var name: String = ""
+        var sets: [Sets] = []
+    }
+    
+    var data: FormData {
+        FormData(name: name, sets: sets)
+    }
+    
+    mutating func update(from data: FormData) {
+            name = data.name
+            sets = data.sets
+            
+    }
+}
+
+
+
+/*extension Set {
     struct Sets: Identifiable, Codable, Hashable {
         var id: UUID
         var howmuch: Float
@@ -73,7 +117,7 @@ extension Set {
     var data: Data {
         Data(name: name, sets: sets)
       }
-}
+}*/
 
 extension Set {
     static let sampleData: [Set] =
