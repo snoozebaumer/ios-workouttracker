@@ -11,11 +11,13 @@ struct ExercisesView: View {
     @Binding var exercises: [Exercise]
     @State var isPresentingNewExerciseView = false;
     @State private var newExercise = Exercise.FormData()
+    @Binding var set: [Set]
+    
     
     var body: some View {
         List {
             ForEach($exercises) { $exercise in
-                NavigationLink(destination: ExerciseDetailView(exercise: $exercise)) {
+                NavigationLink(destination: ExerciseDetailView(exercise: $exercise, /*Why parameter set is necesarry here?*/sets: $set)) {
                     ExerciseListItemView(exercise: exercise)
                 }
             }
@@ -68,7 +70,7 @@ struct ExercisesView: View {
 struct ExercisesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExercisesView(exercises: .constant(Exercise.sampleData))
+            ExercisesView(exercises: .constant(Exercise.sampleData), set: .constant(Set.sampleData))
         }
     }
 }

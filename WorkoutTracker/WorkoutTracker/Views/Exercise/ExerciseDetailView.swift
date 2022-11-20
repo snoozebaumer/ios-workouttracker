@@ -12,6 +12,12 @@ struct ExerciseDetailView: View {
     @State private var data = Exercise.FormData()
     @State private var isPresentingEditView = false
     
+    @Binding var sets: [Set]
+    @State var isPresentingNewSetView = false;
+    @State private var newSet = Set.FormData()
+    
+    
+    
     //same as above to add sets
     
     var body: some View {
@@ -26,13 +32,37 @@ struct ExerciseDetailView: View {
             Section(header: Text("Sets")) {
                 //TODO: Add Set List
                 Button("New") {
-                    isPresentingEditView = true
+                    isPresentingNewSetView = true
                 }
             }
         }
         .navigationTitle(exercise.name)
-        //.sheet --> to add setss
+        
+        // Sheet to add sets
+        .sheet(isPresented: $isPresentingNewSetView) {
+            NavigationView {
+                SetEditView(data: $newSet)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                     Button("Dismiss") {
+                         isPresentingNewSetView = false
+                         newSet = Set.FormData()
+                                                    }
+                                                }
+                        ToolbarItem(placement: .confirmationAction) {
+                                                    Button("Add") {
+                                                        let set = Set(data: newSet)
+                                                        sets.append(set)
+                                                        //Set.save(set: set) TBD SQL FOR SET
+                                                        isPresentingNewSetView = false
+                                                        newSet = Set.FormData()
+                                                    }
+                                                }
+                    }
+            }
+        }
  
+        // &&&&&&
         
         .sheet(isPresented: $isPresentingEditView) {
             NavigationView {
@@ -65,7 +95,7 @@ struct ExerciseDetailView: View {
 struct ExerciseDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseDetailView(exercise: .constant(Exercise.sampleData[0]))
+            ExerciseDetailView(exercise: .constant(Exercise.sampleData[0]), sets: .constant(Set.sampleData))
         }
     }
 }

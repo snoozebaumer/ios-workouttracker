@@ -10,10 +10,12 @@ import SwiftUI
 @main
 struct WorkoutTrackerApp: App {
     @State var exercises: [Exercise] = []
+    /*Why parameter set is necesarry here?*/
+    @State var sets: [Set] = []
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ExercisesView(exercises: $exercises)
+                ExercisesView(exercises: $exercises, /*Why parameter set is necesarry here?*/set: $sets)
             }
         }
     }

@@ -23,7 +23,7 @@ struct Set: Identifiable, Codable {
         func convertDateFormatter(date: Date) -> String {
              let date = Date()
              let formatter = DateFormatter()
-             formatter.dateFormat = "dd-MM-yyyy-hh-mm" // change format as per needs
+             formatter.dateFormat = "dd-MM-yyyy hh:mm" // change format as per needs
              let result = formatter.string(from: date)
              return result
            }
