@@ -12,7 +12,7 @@ APP.use(bodyParser.urlencoded({ extended: true }))
 
 const db = new DbContext();
 
-APP.post("/exercise", (req: Request, res: Response): void => {
+APP.post("/exercise/", (req: Request, res: Response): void => {
     let exercise: Exercise = JSON.parse(req.body.exercise);
     db.save(exercise).then((success) => {
         if (success) {
@@ -28,11 +28,11 @@ APP.post("/exercise", (req: Request, res: Response): void => {
 });
 
 APP.put("/exercise/:id", (req: Request, res: Response): void => {
-    let exercise: Exercise = req.body;
+    let exercise: Exercise = JSON.parse(req.body.exercise);
     db.update(exercise).then((success) => {
         if (success) {
             res.status(200).json({
-                message: "Saved successfully!"
+                message: "Edited successfully!"
             });
         } else {
             res.status(500).json({

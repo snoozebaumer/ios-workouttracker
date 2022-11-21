@@ -23,10 +23,10 @@ export class DbContext {
     }
 
     async save(exercise: Exercise): Promise<boolean> {
-        let success = false;
+        let isSuccess = false;
 
         if (!await this.handleCategory(exercise)) {
-            return success;
+            return isSuccess;
         }
 
         let sql = `INSERT INTO Exercises
@@ -36,42 +36,58 @@ export class DbContext {
         try {
             await this.executeInDb(sql, [exercise.id, exercise.name, exercise.category.id]);
             this.exercises.push(exercise);
-            success = true;
+            isSuccess = true;
         } catch (e) {
             console.log(e)
-            success = false;
+            isSuccess = false;
         }
 
-        return success
+        return isSuccess
     }
 
     async update(exercise: Exercise): Promise<boolean> {
-        let success = true;
-        // TODO: update incoming exercise on DB
-        return success
+        let isSuccess = false;
+
+        if (!await this.handleCategory(exercise)) {
+            return isSuccess;
+        }
+
+        let sql = `UPDATE Exercises
+                      SET Name=?, CategoryId=?
+                      WHERE Id=?;`
+
+        try {
+            await this.executeInDb(sql, [exercise.name, exercise.category.id, exercise.id]);
+            isSuccess = true;
+        } catch (e) {
+            console.log(e);
+            isSuccess = false;
+        }
+
+        return isSuccess
     }
 
     async handleCategory(exercise: Exercise): Promise<boolean> {
-        let success = false;
+        let isSuccess = false;
 
         if (this.categories.indexOf(exercise.category) >= 0) {
-            return success;
+            return !isSuccess;
         }
 
         let sql = `INSERT IGNORE INTO Categories
                        (Id, Name)
-                   VALUES (?, ?)`
+                   VALUES (?, ?);`
 
         try {
             await this.executeInDb(sql, [exercise.category.id, exercise.category.name]);
             this.categories.push(exercise.category);
-            success = true;
+            isSuccess = true;
         } catch (e) {
             console.log(e);
-            success = false;
+            isSuccess = false;
         }
 
-        return success;
+        return isSuccess;
     }
 
     async executeInDb(sql: string, values: Array<any>): Promise<OkPacket> {

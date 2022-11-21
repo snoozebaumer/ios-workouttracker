@@ -40,13 +40,38 @@ extension Exercise {
         FormData(name: name, categoryName: category.name)
     }
     
-    mutating func update(from data: FormData) {
-            name = data.name
-            let existingCategory = Exercise.categories.first { category in
-                category.name == data.categoryName
-            }
-            self.category = existingCategory ?? Category(name: data.categoryName)
+    mutating func update(from data: FormData, completion:@escaping(_ isSuccess: Bool) -> ()) async {
+        let existingCategory = Exercise.categories.first { category in
+            category.name == data.categoryName
+        }
+        
+        let category = existingCategory ?? Category(name: data.categoryName)
+        let savingExercise: Exercise = Exercise(id: self.id, title: data.name, category: category)
+        
+        if (existingCategory == nil) {
             Exercise.categories.append(self.category)
+        }
+        let isSuccess = await fetchUpdateSuccess(savingExercise: savingExercise, id: self.id)
+        if (isSuccess) {
+            self.name = data.name
+            self.category = category
+        }
+        completion(isSuccess)
+        /*Exercise.save(exercise: savingExercise, httpMethod: "PUT", id: self.id) {
+            isSuccess in
+            if(isSuccess) {
+                self = savingExercise
+            }
+            completion(isSuccess)
+        }*/
+    }
+    
+    func fetchUpdateSuccess(savingExercise: Exercise, id: UUID) async -> Bool {
+        await withCheckedContinuation { continuation in
+            Exercise.save(exercise: savingExercise, httpMethod: "PUT", id: id) { isSuccess in
+                continuation.resume(returning: isSuccess)
+            }
+        }
     }
 }
 
@@ -55,8 +80,8 @@ extension Exercise {
 }
 
 extension Exercise {
-    static func save(exercise: Exercise) {
-        guard let url =  URL(string:"http://localhost:3000/exercise")
+    static func save(exercise: Exercise, httpMethod: String = "POST", id: UUID? = nil ,completion:@escaping(_ isSuccess: Bool) -> ())  {
+        guard let url =  URL(string:"http://localhost:3000/exercise/" + (id?.uuidString ?? ""))
         else{
             return
         }
@@ -66,21 +91,20 @@ extension Exercise {
         let postString = "exercise=" + jsonString!
         
         var request = URLRequest(url: url)
-        request.httpMethod = "POST"
+        request.addValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = httpMethod
         request.httpBody = postString.data(using: .utf8)
-        
         URLSession.shared.dataTask(with: request){
             (data, response, error) in
-            print(response as Any)
             if let error = error {
                 print(error)
+                completion(false)
                 return
             }
-            guard let data = data else{
-                return
-            }
-            print(data, String(data: data, encoding: .utf8) ?? "*unknown encoding*")
             
+            let httpResponse = response as! HTTPURLResponse
+            let isSuccess = (httpResponse.statusCode == 200)
+            completion(isSuccess)
         }.resume()
     }
 }

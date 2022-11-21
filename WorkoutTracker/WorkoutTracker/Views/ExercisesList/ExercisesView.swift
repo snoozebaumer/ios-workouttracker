@@ -11,6 +11,7 @@ struct ExercisesView: View {
     @Binding var exercises: [Exercise]
     @State var isPresentingNewExerciseView = false;
     @State private var newExercise = Exercise.FormData()
+    @State private var errorInExerciseEditView = false
     @Binding var set: [Set]
     
     
@@ -44,7 +45,7 @@ struct ExercisesView: View {
       
         .sheet(isPresented: $isPresentingNewExerciseView) {
             NavigationView {
-                ExerciseEditView(data: $newExercise)
+                ExerciseEditView(data: $newExercise, hasConnectionError: $errorInExerciseEditView)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                      Button("Dismiss") {
@@ -55,11 +56,16 @@ struct ExercisesView: View {
                         ToolbarItem(placement: .confirmationAction) {
                                                     Button("Add") {
                                                         let exercise = Exercise(data: newExercise)
-                                                        exercises.append(exercise)
-                                                        Exercise.save(exercise: exercise)
-                                                        isPresentingNewExerciseView = false
-                                                        newExercise = Exercise.FormData()
-                                                    }
+                                                        Exercise.save(exercise: exercise) {isSuccess in
+                                                            if(isSuccess) {
+                                                                isPresentingNewExerciseView = false
+                                                                exercises.append(exercise)
+                                                    newExercise = Exercise.FormData()
+                                                            } else {
+                                                                errorInExerciseEditView = true
+                                                            }
+                                    
+                                                        }                       }
                                                 }
                     }
             }

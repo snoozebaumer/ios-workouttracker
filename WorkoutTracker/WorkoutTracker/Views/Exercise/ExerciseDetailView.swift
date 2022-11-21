@@ -11,6 +11,7 @@ struct ExerciseDetailView: View {
     @Binding var exercise: Exercise
     @State private var data = Exercise.FormData()
     @State private var isPresentingEditView = false
+    @State private var errorInExerciseEditView = false;
     
     @Binding var sets: [Set]
     @State var isPresentingNewSetView = false;
@@ -66,7 +67,7 @@ struct ExerciseDetailView: View {
         
         .sheet(isPresented: $isPresentingEditView) {
             NavigationView {
-                ExerciseEditView(data: $data)
+                ExerciseEditView(data: $data, hasConnectionError: $errorInExerciseEditView)
                     .navigationTitle(exercise.name)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
@@ -76,8 +77,16 @@ struct ExerciseDetailView: View {
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("Done") {
-                                isPresentingEditView = false
-                                exercise.update(from: data)
+                                Task {
+                                    await exercise.update(from: data) {
+                                        isSuccess in
+                                        if (isSuccess) {
+                                            isPresentingEditView = false
+                                        } else {
+                                            errorInExerciseEditView = true
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
