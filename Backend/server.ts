@@ -44,7 +44,7 @@ APP.put("/exercise/:id", (req: Request, res: Response): void => {
 
 APP.get("/exercises/", (req: Request, res: Response): void => {
     db.get().then((exercises) => {
-        res.status(200).json(JSON.stringify(exercises));
+        res.status(200).json(exercises);
     }).catch(() => {
         res.status(500).json({
             message: "An error occurred while fetching exercises. Please try again later."

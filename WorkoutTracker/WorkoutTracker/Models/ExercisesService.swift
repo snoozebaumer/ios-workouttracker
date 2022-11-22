@@ -38,15 +38,47 @@ class ExercisesService: ObservableObject {
         }.resume()
     }
     
-    static func load(completion: @escaping(_ exercises: [Exercise]) -> ()) {
-        // TODO: load from server, then call load in WorkoutTrackerApp with
-        /* .task {
-         do {
-             store.scrums = try await ScrumStore.load()
-         } catch {
-             errorWrapper = ErrorWrapper(error: error, guidance: "Scrumdinger will load sample data and continue")
-         }
-     } on Navigationview*/
+    static func load() async throws -> [Exercise] {
+        try await withCheckedThrowingContinuation { continuation in
+            load { result in
+                switch result {
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                case .success(let exerciseList):
+                    continuation.resume(returning: exerciseList)
+                }
+            }
+        }
+    }
+    
+    private static func load(completion: @escaping(Result<[Exercise], Error>) -> Void) {
+        guard let url =  URL(string:"http://localhost:3000/exercises/")
+        else{
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        URLSession.shared.dataTask(with: request) {(data,response,error) in
+            if let error = error {
+                print(error)
+                DispatchQueue.main.async {
+                    completion(.failure(error))
+                }
+                return
+            }
+            
+            if let data = data, data.isEmpty == false  {
+                do {
+                    let exercises = try JSONDecoder().decode([Exercise].self, from: data)
+                    completion(.success(exercises))
+                } catch {
+                    completion(.failure(error))
+                }
+            }
+            
+        }.resume()
     }
 }
 
