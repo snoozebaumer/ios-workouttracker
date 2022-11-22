@@ -9,13 +9,13 @@ import SwiftUI
 
 @main
 struct WorkoutTrackerApp: App {
-    @State var exercises: [Exercise] = []
+    @StateObject var exercisesContext = ExercisesService()
     /*Why parameter set is necesarry here?*/
     @State var sets: [Set] = []
     var body: some Scene {
         WindowGroup {
             NavigationView {
-                ExercisesView(exercises: $exercises, /*Why parameter set is necesarry here?*/set: $sets)
+                ExercisesView(exercises: $exercisesContext.exercises, set: $sets)
             }
         }
     }

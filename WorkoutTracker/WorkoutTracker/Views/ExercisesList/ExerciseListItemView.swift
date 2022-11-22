@@ -26,7 +26,7 @@ struct ExerciseListItemView: View {
 }
 
 struct ExerciseListItemView_Previews: PreviewProvider {
-    static var exercise = Exercise.sampleData[0]
+    static var exercise = ExercisesService.sampleData.exercises[0]
     static var previews: some View {
         ExerciseListItemView(exercise: exercise)
     }

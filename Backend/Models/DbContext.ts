@@ -4,14 +4,14 @@ import {Category} from "./Category";
 import {Connection, OkPacket} from "mysql";
 
 export class DbContext {
-    dbHost: string = "localhost";
-    dbUsername: string = "root";
-    dbPassword: string = "password";
-    dbName: string = "WorkoutTracker";
+    private dbHost: string = "localhost";
+    private dbUsername: string = "root";
+    private dbPassword: string = "password";
+    private dbName: string = "WorkoutTracker";
 
-    exercises: Array<Exercise> = new Array<Exercise>();
-    categories: Array<Category> = new Array<Category>();
-    connection: Connection;
+    private exercises: Array<Exercise> = new Array<Exercise>();
+    private categories: Array<Category> = new Array<Category>();
+    private connection: Connection;
 
     constructor() {
         this.connection = mysql.createConnection({
@@ -20,6 +20,24 @@ export class DbContext {
             password: this.dbPassword,
             database: this.dbName
         })
+    }
+
+    async get(): Promise<Array<Exercise>> {
+        if(this.exercises.length > 0) {
+            return this.exercises;
+        }
+
+        this.categories = await this.getCategories();
+        let exercisesDb = await this.getExercises();
+        this.exercises = exercisesDb.map((value) => {
+            let category = this.categories.find(c => c.id == value.CategoryId);
+            if (!category) {
+                throw TypeError();
+            }
+            return new Exercise(value.Id, value.Name, category);
+        });
+
+        return this.exercises;
     }
 
     async save(exercise: Exercise): Promise<boolean> {
@@ -90,7 +108,7 @@ export class DbContext {
         return isSuccess;
     }
 
-    async executeInDb(sql: string, values: Array<any>): Promise<OkPacket> {
+    private async executeInDb(sql: string, values: Array<any>): Promise<OkPacket> {
         return new Promise<OkPacket>((resolve, reject) => {
             this.connection.query(sql, values, function (err: any, data: OkPacket) {
                 if (err) {
@@ -99,7 +117,35 @@ export class DbContext {
                     resolve(data);
                 }
             });
-        })
+        });
     }
 
+    private async getCategories(): Promise<Array<Category>> {
+        return new Promise<Array<Category>>((resolve, reject) => {
+            this.connection.query(`SELECT * FROM Categories`,
+                function (err: any, data: Array<{Id: string, Name: string}>) {
+                if (err) {
+                    reject(err);
+                } else {
+                    let categoryList: Array<Category> = data.map(value => {
+                        return new Category(value.Id, value.Name);
+                    })
+                    resolve(categoryList);
+                }
+            });
+        });
+    }
+
+    private async getExercises(): Promise<Array<{Id: string, Name: string, CategoryId: String}>> {
+        return new Promise<Array<{Id: string, Name: string, CategoryId: String}>>((resolve, reject) => {
+            this.connection.query(`SELECT * FROM Exercises`,
+                function (err: any, data: Array<{Id: string, Name: string, CategoryId: String}>) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data);
+                    }
+                });
+        });
+    }
 }

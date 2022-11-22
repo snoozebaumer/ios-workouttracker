@@ -56,10 +56,12 @@ struct ExercisesView: View {
                         ToolbarItem(placement: .confirmationAction) {
                                                     Button("Add") {
                                                         let exercise = Exercise(data: newExercise)
-                                                        Exercise.save(exercise: exercise) {isSuccess in
+                                                        ExercisesService.save(exercise: exercise) {isSuccess in
                                                             if(isSuccess) {
                                                                 isPresentingNewExerciseView = false
-                                                                exercises.append(exercise)
+                                                                DispatchQueue.main.async {
+                                                                    exercises.append(exercise)
+                                                                }
                                                     newExercise = Exercise.FormData()
                                                             } else {
                                                                 errorInExerciseEditView = true
@@ -76,7 +78,7 @@ struct ExercisesView: View {
 struct ExercisesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExercisesView(exercises: .constant(Exercise.sampleData), set: .constant(Set.sampleData))
+            ExercisesView(exercises: .constant(ExercisesService.sampleData.exercises), set: .constant(Set.sampleData))
         }
     }
 }

@@ -28,6 +28,6 @@ struct ExerciseEditView: View {
 
 struct ExerciseEditView_Previews: PreviewProvider {
     static var previews: some View {
-        ExerciseEditView(data: .constant(Exercise.sampleData[0].data), hasConnectionError: .constant(false))
+        ExerciseEditView(data: .constant(ExercisesService.sampleData.exercises[0].data), hasConnectionError: .constant(false))
     }
 }

@@ -18,6 +18,7 @@
 		196157F42923DE510021D7D1 /* ExerciseEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196157F32923DE510021D7D1 /* ExerciseEditView.swift */; };
 		19943FFB292A90860044C487 /* SetEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19943FFA292A90860044C487 /* SetEditView.swift */; };
 		19943FFF292AAF370044C487 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 19943FFE292AAF370044C487 /* AlertToast */; };
+		19C72495292C0F9400C86947 /* ExercisesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C72494292C0F9400C86947 /* ExercisesService.swift */; };
 		19E119DF292A8FC4002A43E8 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E119DE292A8FC4002A43E8 /* Set.swift */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		196157F12923D5C20021D7D1 /* ExerciseDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseDetailView.swift; sourceTree = "<group>"; };
 		196157F32923DE510021D7D1 /* ExerciseEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseEditView.swift; sourceTree = "<group>"; };
 		19943FFA292A90860044C487 /* SetEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEditView.swift; sourceTree = "<group>"; };
+		19C72494292C0F9400C86947 /* ExercisesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesService.swift; sourceTree = "<group>"; };
 		19E119DE292A8FC4002A43E8 /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -90,6 +92,7 @@
 				19E119DE292A8FC4002A43E8 /* Set.swift */,
 				196157E62923C7190021D7D1 /* Exercise.swift */,
 				196157E92923C8230021D7D1 /* Category.swift */,
+				19C72494292C0F9400C86947 /* ExercisesService.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -159,7 +162,6 @@
 		196157CB2923BCAB0021D7D1 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1400;
 				LastUpgradeCheck = 1400;
 				TargetAttributes = {
@@ -209,6 +211,7 @@
 				196157F22923D5C20021D7D1 /* ExerciseDetailView.swift in Sources */,
 				196157E52923C6F50021D7D1 /* ExercisesView.swift in Sources */,
 				196157F42923DE510021D7D1 /* ExerciseEditView.swift in Sources */,
+				19C72495292C0F9400C86947 /* ExercisesService.swift in Sources */,
 				196157EA2923C8230021D7D1 /* Category.swift in Sources */,
 				196157E72923C7190021D7D1 /* Exercise.swift in Sources */,
 				19943FFB292A90860044C487 /* SetEditView.swift in Sources */,
