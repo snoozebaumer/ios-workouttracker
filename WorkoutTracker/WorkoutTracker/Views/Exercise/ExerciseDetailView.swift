@@ -30,11 +30,18 @@ struct ExerciseDetailView: View {
                     Text(exercise.category.name)
                                 }
             }
+            Button("New") {
+                isPresentingNewSetView = true
+            }
             Section(header: Text("Sets")) {
                 //TODO: Add Set List
-                Button("New") {
-                    isPresentingNewSetView = true
+                List {
+                    ForEach($sets) { $sets in
+                        SetListItemView(set: sets)
+                    }
                 }
+                
+               
             }
         }
         .navigationTitle(exercise.name)

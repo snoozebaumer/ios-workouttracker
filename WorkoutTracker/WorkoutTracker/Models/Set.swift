@@ -11,14 +11,14 @@ struct Set: Identifiable, Codable {
     let id: UUID
     var name: String
     //var excercise: Exercise
-    var excercise: String
+    // var excercise: String
     var sets : [Sets]
-    var strength : Bool
-    var metric : Bool
+   // var strength : Bool
+   // var metric : Bool
    
  
     
-    init(id: UUID = UUID(), /*excercise: Exercise*/ excercise:String, strenght: Bool, metric: Bool, sets: [Float]) {
+    init(id: UUID = UUID(), /*excercise: Exercise*/ /*excercise:String, strenght: Bool, metric: Bool,*/ sets: [Float]) {
         self.id = id
         func convertDateFormatter(date: Date) -> String {
              let date = Date()
@@ -28,8 +28,8 @@ struct Set: Identifiable, Codable {
              return result
            }
         self.name = convertDateFormatter(date: Date.now)
-        self.excercise = excercise
-        self.strength = strenght
+        //self.excercise = excercise
+       /* self.strength = strenght
         self.metric = metric
         if(strenght){
             //display as 5 * x{metric}
@@ -42,8 +42,11 @@ struct Set: Identifiable, Codable {
             if(!metric){
                 //diplay as 5mi / x{min}
             }
-        }
-       self.sets = sets.map { _ in Sets(howmuch: sets[0], howlong: sets[1]) }
+        }*/
+        
+        self.sets = []
+        self.sets.append(Sets(howmuch: sets[0], howlong: sets[1]))
+    
         
     }
     
@@ -56,9 +59,9 @@ extension Set {
         self.name = data.name
         self.sets = data.sets
         // TBD 
-        self.strength = true
-        self.metric = true
-        self.excercise = ""
+        //self.strength = true
+        //self.metric = true
+        //self.excercise = ""
         
     }
     
@@ -75,6 +78,7 @@ extension Set {
         }
     }
     
+
     struct FormData {
         var name: String = ""
         var sets: [Sets] = []
@@ -93,36 +97,11 @@ extension Set {
 
 
 
-/*extension Set {
-    struct Sets: Identifiable, Codable, Hashable {
-        var id: UUID
-        var howmuch: Float
-        var howlong: Float
-        
-        init(id: UUID = UUID(), howmuch: Float, howlong: Float) {
-            self.id = id
-            self.howmuch = howmuch
-            self.howlong = howlong
-            
-        }
-    }
-    
-    
-    struct Data {
-        var name: String = ""
-        var sets: [Sets] = []
-        //var excercise : Exercise
-    }
-    
-    var data: Data {
-        Data(name: name, sets: sets)
-      }
-}*/
-
 extension Set {
     static let sampleData: [Set] =
     [
-        Set(excercise: "Test", strenght: true, metric: true, sets:[4,2])
+        Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2]),
+       
         
     ]
 }

@@ -20,6 +20,7 @@
 		19943FFF292AAF370044C487 /* AlertToast in Frameworks */ = {isa = PBXBuildFile; productRef = 19943FFE292AAF370044C487 /* AlertToast */; };
 		19C72495292C0F9400C86947 /* ExercisesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C72494292C0F9400C86947 /* ExercisesService.swift */; };
 		19E119DF292A8FC4002A43E8 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E119DE292A8FC4002A43E8 /* Set.swift */; };
+		2E43445D29311555000CCF27 /* SetListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E43445C29311555000CCF27 /* SetListItemView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -36,6 +37,7 @@
 		19943FFA292A90860044C487 /* SetEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetEditView.swift; sourceTree = "<group>"; };
 		19C72494292C0F9400C86947 /* ExercisesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesService.swift; sourceTree = "<group>"; };
 		19E119DE292A8FC4002A43E8 /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
+		2E43445C29311555000CCF27 /* SetListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetListItemView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,6 +112,7 @@
 			isa = PBXGroup;
 			children = (
 				19943FFA292A90860044C487 /* SetEditView.swift */,
+				2E43445C29311555000CCF27 /* SetListItemView.swift */,
 			);
 			path = Set;
 			sourceTree = "<group>";
@@ -216,6 +219,7 @@
 				196157E72923C7190021D7D1 /* Exercise.swift in Sources */,
 				19943FFB292A90860044C487 /* SetEditView.swift in Sources */,
 				196157EC2923D1050021D7D1 /* ExerciseListItemView.swift in Sources */,
+				2E43445D29311555000CCF27 /* SetListItemView.swift in Sources */,
 				196157D72923BCAB0021D7D1 /* WorkoutTrackerApp.swift in Sources */,
 				19E119DF292A8FC4002A43E8 /* Set.swift in Sources */,
 			);
