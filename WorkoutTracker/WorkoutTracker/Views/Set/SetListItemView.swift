@@ -11,10 +11,31 @@ struct SetListItemView: View {
     let set: Set
     
     var body: some View {
-        Text("\(set.id)")
+        VStack{
+                 Text(set.name)
+                .font(.subheadline)
+                 VStack {
+                     ForEach(set.sets) {s in
+                         HStack{
+                         Text(String(format: "%.2f", s.howmuch))
+                         Text(" x ")
+                         Text(String(format: "%.2f", s.howlong))
+                         }
+                     }
+                     
+                 }
+                 .font(.caption)
+        }
+        
+ 
+            
+        }
+        
     }
     
-}
+
+
+
 
     
 

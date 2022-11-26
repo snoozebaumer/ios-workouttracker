@@ -11,11 +11,16 @@ struct Exercise: Identifiable, Codable {
     let id: UUID
     var name: String
     var category: Category
+  
+
+ 
     
     init(id: UUID = UUID(), title: String, category: Category) {
         self.id = id
         self.name = title
         self.category = category
+      
+        
     }
     
 }
@@ -68,6 +73,10 @@ extension Exercise {
     }
 }
 
+
 extension Exercise {
     static var categories: [Category] = []
 }
+
+
+

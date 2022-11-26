@@ -15,15 +15,13 @@ struct SetEditView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Set")) {
-                TextField("Date", text: $data.name)
-            }
             Section(header: Text("Workload")){
                 ForEach(data.sets) { sets in
                     HStack{
-                        Text("\(sets.howmuch)")
+                        //Text("\(sets.howmuch)")
+                        Text(String(format: "%.2f", sets.howmuch))
                         padding()
-                        Text("\(sets.howlong)")
+                        Text(String(format: "%.2f", sets.howlong))
                     }
                 
                     

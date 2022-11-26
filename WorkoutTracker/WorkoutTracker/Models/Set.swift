@@ -11,7 +11,7 @@ struct Set: Identifiable, Codable {
     let id: UUID
     var name: String
     //var excercise: Exercise
-    // var excercise: String
+    //var excercise: String
     var sets : [Sets]
    // var strength : Bool
    // var metric : Bool
@@ -23,7 +23,7 @@ struct Set: Identifiable, Codable {
         func convertDateFormatter(date: Date) -> String {
              let date = Date()
              let formatter = DateFormatter()
-             formatter.dateFormat = "dd-MM-yyyy hh:mm" // change format as per needs
+             formatter.dateFormat = "dd.MM.yyyy hh:mm" // change format as per needs
              let result = formatter.string(from: date)
              return result
            }
@@ -56,7 +56,14 @@ struct Set: Identifiable, Codable {
 extension Set {
     init(id: UUID = UUID(), data: FormData) {
         self.id = id
-        self.name = data.name
+        func convertDateFormatter(date: Date) -> String {
+             let date = Date()
+             let formatter = DateFormatter()
+             formatter.dateFormat = "dd.MM.yyyy hh:mm" // change format as per needs
+             let result = formatter.string(from: date)
+             return result
+           }
+        self.name = convertDateFormatter(date: Date.now)
         self.sets = data.sets
         // TBD 
         //self.strength = true
@@ -80,16 +87,14 @@ extension Set {
     
 
     struct FormData {
-        var name: String = ""
         var sets: [Sets] = []
     }
     
     var data: FormData {
-        FormData(name: name, sets: sets)
+        FormData(sets: sets)
     }
     
     mutating func update(from data: FormData) {
-            name = data.name
             sets = data.sets
             
     }

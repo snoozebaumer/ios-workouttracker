@@ -14,8 +14,12 @@ struct ExerciseDetailView: View {
     @State private var errorInExerciseEditView = false;
     
     @Binding var sets: [Set]
-    @State var isPresentingNewSetView = false;
+    @State private var isPresentingNewSetView = false;
     @State private var newSet = Set.FormData()
+    
+    //@State private var newSet = Exercise.SetFormData()
+
+    
     
     
     
@@ -34,12 +38,13 @@ struct ExerciseDetailView: View {
                 isPresentingNewSetView = true
             }
             Section(header: Text("Sets")) {
-                //TODO: Add Set List
-                List {
-                    ForEach($sets) { $sets in
-                        SetListItemView(set: sets)
-                    }
-                }
+            
+                    ForEach(sets) { Set in
+             
+                            SetListItemView(set: Set)
+                     
+                         }
+                
                 
                
             }
@@ -52,25 +57,26 @@ struct ExerciseDetailView: View {
                 SetEditView(data: $newSet)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                     Button("Dismiss") {
-                         isPresentingNewSetView = false
-                         newSet = Set.FormData()
-                                                    }
-                                                }
+                            Button("Dismiss") {
+                                isPresentingNewSetView = false
+                                
+                            }
+                        }
                         ToolbarItem(placement: .confirmationAction) {
-                                                    Button("Add") {
-                                                        let set = Set(data: newSet)
-                                                        sets.append(set)
-                                                        //Set.save(set: set) TBD SQL FOR SET
-                                                        isPresentingNewSetView = false
-                                                        newSet = Set.FormData()
-                                                    }
-                                                }
+                            Button("Add") {
+                                let set = Set(data: newSet)
+                                sets.append(set)
+                                newSet = Set.FormData()
+                                isPresentingNewSetView = false
+        
+                                
+                            }
+                        }
                     }
             }
         }
- 
-        // &&&&&&
+        
+        
         
         .sheet(isPresented: $isPresentingEditView) {
             NavigationView {
