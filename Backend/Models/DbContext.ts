@@ -85,6 +85,34 @@ export class DbContext {
         return isSuccess
     }
 
+    async delete(id: string): Promise<boolean> {
+        let sqlCategoryId = `SELECT CategoryId FROM Exercises 
+                    WHERE Id = ?`
+        let categoryResult = await this.executeInDb(sqlCategoryId, [id]);
+
+        let sqlDeletion = `DELETE FROM Exercises 
+                    WHERE Id = ?`
+        let result = await this.executeInDb(sqlDeletion, [id]);
+
+        if(result.affectedRows === 0) {
+            throw Error();
+        }
+
+        return await this.tryDeleteCategory(categoryResult[0].CategoryId);
+    }
+
+    async tryDeleteCategory(id: string): Promise<boolean> {
+        let sql = `DELETE FROM Categories 
+                    WHERE Id = ? AND Id not IN 
+                    (
+                        SELECT  CategoryId 
+                        FROM    Exercises
+                    )`
+
+        let result = await this.executeInDb(sql,[id]);
+        return !(result.affectedRows === 0); //have to do this rather than > 0 as type wasn't compared that way
+    }
+
     async handleCategory(exercise: Exercise): Promise<boolean> {
         let isSuccess = false;
 
@@ -108,9 +136,9 @@ export class DbContext {
         return isSuccess;
     }
 
-    private async executeInDb(sql: string, values: Array<any>): Promise<OkPacket> {
+    private async executeInDb(sql: string, values: Array<any>): Promise<OkPacket | any> {
         return new Promise<OkPacket>((resolve, reject) => {
-            this.connection.query(sql, values, function (err: any, data: OkPacket) {
+            this.connection.query(sql, values, function (err: any, data: OkPacket | any) {
                 if (err) {
                     reject(err);
                 } else {

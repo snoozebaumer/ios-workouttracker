@@ -8,7 +8,7 @@ import * as bodyParser from "body-parser";
 const PORT = 3000;
 
 const APP: Application = express();
-APP.use(bodyParser.urlencoded({ extended: true }))
+APP.use(bodyParser.urlencoded({extended: true}))
 
 const db = new DbContext();
 
@@ -39,6 +39,19 @@ APP.put("/exercise/:id", (req: Request, res: Response): void => {
                 message: "An error occurred while saving changes. Please try again later."
             });
         }
+    });
+});
+
+APP.delete("/exercise/:id", (req: Request, res: Response): void => {
+    let id: string = req.params.id;
+    db.delete(id).then((categoryIncluded) => {
+        res.status(200).json({
+            categoryIncluded: categoryIncluded
+        });
+    }).catch(() => {
+        res.status(500).json({
+            message: "An error occurred while deleting exercise. Please try again later."
+        });
     });
 });
 
