@@ -11,6 +11,7 @@ struct Exercise: Identifiable, Codable {
     let id: UUID
     var name: String
     var category: Category
+    var eSet: [Set] = []
   
 
  
@@ -19,8 +20,13 @@ struct Exercise: Identifiable, Codable {
         self.id = id
         self.name = title
         self.category = category
+       
       
         
+    }
+    
+    mutating func updateSet(set: Set){
+        eSet.append(set)
     }
     
 }
@@ -34,6 +40,7 @@ extension Exercise {
         }
         self.category = existingCategory ?? Category(name: data.categoryName)
         Exercise.categories.append(self.category)
+        
     }
     
     struct FormData {
@@ -72,6 +79,7 @@ extension Exercise {
         }
     }
 }
+
 
 
 extension Exercise {

@@ -37,11 +37,22 @@ struct ExerciseDetailView: View {
             Button("New") {
                 isPresentingNewSetView = true
             }
-            Section(header: Text("Sets")) {
+            /*Section(header: Text("Sets")) {
             
                     ForEach(sets) { Set in
              
                             SetListItemView(set: Set)
+                     
+                         }
+                
+                
+               
+            }*/
+            Section(header: Text("Sets")) {
+            
+                ForEach(exercise.eSet) { eset in
+             
+                            SetListItemView(set: eset)
                      
                          }
                 
@@ -66,6 +77,7 @@ struct ExerciseDetailView: View {
                             Button("Add") {
                                 let set = Set(data: newSet)
                                 sets.append(set)
+                                exercise.updateSet(set: set)
                                 newSet = Set.FormData()
                                 isPresentingNewSetView = false
         
