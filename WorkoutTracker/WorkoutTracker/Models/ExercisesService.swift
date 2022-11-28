@@ -38,6 +38,29 @@ class ExercisesService: ObservableObject {
         }.resume()
     }
     
+    
+    static func delete(id: UUID, completion:@escaping(_ didDeleteCategory: Bool) -> Void) {
+        guard let url =  URL(string:"http://localhost:3000/exercise/" + id.uuidString)
+        else{
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        URLSession.shared.dataTask(with: request){
+            (data, response, error) in
+            if let error = error {
+                print(error)
+                return
+            }
+            
+            if let data = data, data.isEmpty == false  {
+                let didAlsoDeleteCategory: Bool = String(data: data, encoding: .utf8) == "true"
+                completion(didAlsoDeleteCategory)
+            }
+        }.resume()
+    }
+    
     static func load() async throws -> [Exercise] {
         try await withCheckedThrowingContinuation { continuation in
             load { result in

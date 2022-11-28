@@ -12,6 +12,8 @@ struct ExercisesView: View {
     @State var isPresentingNewExerciseView = false;
     @State private var newExercise = Exercise.FormData()
     @State private var errorInExerciseEditView = false
+    @State private var isPresentingConfirmDeletionView = false
+    @State var selectedExercise: Exercise? = nil
     @Binding var set: [Set]
     
     
@@ -20,6 +22,32 @@ struct ExercisesView: View {
             ForEach($exercises) { $exercise in
                 NavigationLink(destination: ExerciseDetailView(exercise: $exercise, /*Why parameter set is necesarry here?*/sets: $set)) {
                     ExerciseListItemView(exercise: exercise)
+                }.contextMenu {
+                    Button(role: .destructive) {
+                        selectedExercise = exercise
+                        isPresentingConfirmDeletionView = true
+                    } label: {
+                        Label("Delete Exercise",systemImage: "trash")
+                    }
+                }.alert(String(format: NSLocalizedString("Are you sure you want to delete exercise \"%@\"?", comment: ""), selectedExercise?.name ?? ""), isPresented: $isPresentingConfirmDeletionView) {
+                    Button("Delete Exercise", role: .destructive) {
+                        ExercisesService.delete(id: selectedExercise!.id) { didAlsoDeleteCategory in
+                            let index: Int? = exercises.firstIndex(where: {selectedExercise!.id == $0.id})
+                            
+                            DispatchQueue.main.async {
+                                exercises.remove(at: index!)
+                                if(didAlsoDeleteCategory) {
+                                    let categoryIndex: Int? = Exercise.categories.firstIndex {
+                                        selectedExercise?.category.id == $0.id}
+                                        Exercise.categories.remove(at: categoryIndex!)
+                                    isPresentingConfirmDeletionView = false
+                                    selectedExercise = nil
+                                    }
+                                    
+                                }
+                            }
+                        
+                    }
                 }
             }
         }
@@ -42,7 +70,6 @@ struct ExercisesView: View {
 
             }
                 }
-      
         .sheet(isPresented: $isPresentingNewExerciseView) {
             NavigationView {
                 ExerciseEditView(data: $newExercise, hasConnectionError: $errorInExerciseEditView)
