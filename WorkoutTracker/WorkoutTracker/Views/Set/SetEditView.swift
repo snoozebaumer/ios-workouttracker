@@ -9,31 +9,33 @@ import SwiftUI
 
 struct SetEditView: View {
     //@Binding var data = Set.Data()
+    //@State private var d
     @Binding var data: Set.FormData
-    @State private var newHowMuch = ""
-    @State private var newHowLong = ""
+    
+    @State var newHowMuch : Float = 0
+    @State var newHowLong : Float = 0
     
     var body: some View {
         Form {
             Section(header: Text("Workload")){
-                ForEach(data.sets) { sets in
+                ForEach(data.sets) { set in
                     HStack{
-                        //Text("\(sets.howmuch)")
-                        Text(String(format: "%.2f", sets.howmuch))
+                        Text("\(set.howmuch)")
+                        //TextField("h", value: set.howmuch, format: .number)
                         padding()
-                        Text(String(format: "%.2f", sets.howlong))
+                        Text(String(format: "%.2f", set.howlong))
                     }
                 
                     
                 }
             }
             HStack {
-                TextField("How Much", text: $newHowMuch )
-                TextField("How Long", text: $newHowLong )
+                TextField("How Much", value: $newHowMuch, format: .number)
+                TextField("How Long", value: $newHowLong, format: .number)
                 Button(action: {
                     withAnimation{
-                        let newhm = Float(newHowMuch) ?? 0.0
-                        let newhl = Float(newHowLong) ?? 0.0
+                        let newhm = newHowMuch
+                        let newhl = newHowLong
                         let newset = Set.Sets(howmuch: newhm, howlong: newhl)
                         data.sets.append(newset)
                     }
@@ -48,8 +50,8 @@ struct SetEditView: View {
         }
     }
     
-    struct SetEditView_Previews: PreviewProvider {
+    /*struct SetEditView_Previews: PreviewProvider {
         static var previews: some View {
             SetEditView(data: .constant(Set.sampleData[0].data))
         }
-    }}
+    }*/}
