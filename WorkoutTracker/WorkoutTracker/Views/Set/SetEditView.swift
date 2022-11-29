@@ -11,9 +11,12 @@ struct SetEditView: View {
     //@Binding var data = Set.Data()
     //@State private var d
     @Binding var data: Set.FormData
-    
     @State var newHowMuch : Float = 0
     @State var newHowLong : Float = 0
+    @State private var isPresentingSetsEditView = false;
+
+
+    
     
     var body: some View {
         Form {
@@ -21,13 +24,24 @@ struct SetEditView: View {
                 ForEach(data.sets) { set in
                     HStack{
                         Text("\(set.howmuch)")
-                        //TextField("h", value: set.howmuch, format: .number)
                         padding()
-                        Text(String(format: "%.2f", set.howlong))
+                        Text("\(set.howlong)")
+                        Button( action: {
+                            if let index = data.sets.firstIndex(of: set) {
+                                data.sets.remove(at: index) 
+                            }
+    
+                            
+                        })
+                        {
+                            Image(systemName: "minus.circle.fill")
+                        }
+                        
+          
                     }
                 
                     
-                }
+                
             }
             HStack {
                 TextField("How Much", value: $newHowMuch, format: .number)
@@ -38,6 +52,7 @@ struct SetEditView: View {
                         let newhl = newHowLong
                         let newset = Set.Sets(howmuch: newhm, howlong: newhl)
                         data.sets.append(newset)
+                        
                     }
                 })
                 {
@@ -49,9 +64,11 @@ struct SetEditView: View {
  
         }
     }
+      
+    }
     
-    /*struct SetEditView_Previews: PreviewProvider {
+    struct SetEditView_Previews: PreviewProvider {
         static var previews: some View {
             SetEditView(data: .constant(Set.sampleData[0].data))
         }
-    }*/}
+    }}
