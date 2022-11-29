@@ -11,10 +11,13 @@ struct SetEditView: View {
     //@Binding var data = Set.Data()
     //@State private var d
     @Binding var data: Set.FormData
-    
     @State var newHowMuch : Float = 0
     @State var newHowLong : Float = 0
-    
+    @State private var isPresentingSetsEditView = false;
+
+
+
+
     var body: some View {
         Form {
             HStack {
@@ -34,13 +37,14 @@ struct SetEditView: View {
                         let newhl = newHowLong
                         let newset = Set.Sets(howmuch: newhm, howlong: newhl)
                         data.sets.append(newset)
+
                     }
                 })
                 {
                     Image(systemName: "plus.circle.fill")
                 }
             }
-            
+
             Section(header: Text("workload")){
                 ForEach(data.sets) { set in
                     HStack{
@@ -48,8 +52,8 @@ struct SetEditView: View {
                         padding()
                         Text(String(format: "%.2f", set.howlong))
                     }
-                
-                    
+
+
                 }
             }
         }

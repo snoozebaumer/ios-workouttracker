@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SetListItemView: View {
-    let set: Set
+    @Binding var set: Set
     
     var body: some View {
         VStack{
@@ -40,8 +40,8 @@ struct SetListItemView: View {
     
 
 
-struct SetListItemView_Previews: PreviewProvider {
+/*struct SetListItemView_Previews: PreviewProvider {
     static var previews: some View {
         SetListItemView(set: Set.sampleData[0])
-    }
-}
+    }*/
+
