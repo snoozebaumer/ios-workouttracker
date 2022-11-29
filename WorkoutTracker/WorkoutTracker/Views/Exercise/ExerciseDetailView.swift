@@ -52,7 +52,7 @@ struct ExerciseDetailView: View {
             
                 ForEach(exercise.eSet) { eset in
              
-                            SetListItemView(set: eset)
+                    SetListItemView(set: .constant(eset))
                      
                          }
                 

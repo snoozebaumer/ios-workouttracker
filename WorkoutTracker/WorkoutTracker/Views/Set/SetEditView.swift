@@ -52,6 +52,16 @@ struct SetEditView: View {
                         padding()
                         Text(String(format: "%.2f", set.howlong))
                     }
+                    Button( action: {
+                                                if let index = data.sets.firstIndex(of: set) {
+                                                    data.sets.remove(at: index)
+                                                }
+                        
+                                                
+                                            })
+                                            {
+                                                Image(systemName: "minus.circle.fill")
+                                            }
 
 
                 }
