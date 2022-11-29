@@ -17,21 +17,17 @@ struct SetEditView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Workload")){
-                ForEach(data.sets) { set in
-                    HStack{
-                        Text("\(set.howmuch)")
-                        //TextField("h", value: set.howmuch, format: .number)
-                        padding()
-                        Text(String(format: "%.2f", set.howlong))
-                    }
-                
-                    
-                }
-            }
             HStack {
-                TextField("How Much", value: $newHowMuch, format: .number)
-                TextField("How Long", value: $newHowLong, format: .number)
+                VStack(alignment: .leading) {
+                    Text("size")
+                        .font(.caption)
+                    TextField("size", value: $newHowMuch, format: .number)
+                }
+                VStack(alignment: .leading) {
+                    Text("length")
+                        .font(.caption)
+                    TextField("length", value: $newHowLong, format: .number)
+                }
                 Button(action: {
                     withAnimation{
                         let newhm = newHowMuch
@@ -43,15 +39,24 @@ struct SetEditView: View {
                 {
                     Image(systemName: "plus.circle.fill")
                 }
-                
             }
             
- 
+            Section(header: Text("workload")){
+                ForEach(data.sets) { set in
+                    HStack{
+                        Text(String(format: "%.2f", set.howmuch))
+                        padding()
+                        Text(String(format: "%.2f", set.howlong))
+                    }
+                
+                    
+                }
+            }
         }
     }
     
-    /*struct SetEditView_Previews: PreviewProvider {
+    struct SetEditView_Previews: PreviewProvider {
         static var previews: some View {
             SetEditView(data: .constant(Set.sampleData[0].data))
         }
-    }*/}
+    }}

@@ -27,14 +27,14 @@ struct ExerciseDetailView: View {
     
     var body: some View {
         List {
-            Section(header: Text("Exercise Details")) {
+            Section(header: Text("exercise-details")) {
                 HStack {
-                                    Label("Category", systemImage: "figure.arms.open")
+                                    Label("category", systemImage: "figure.arms.open")
                                     Spacer()
                     Text(exercise.category.name)
                                 }
             }
-            Button("New") {
+            Button("new-set") {
                 isPresentingNewSetView = true
             }
             /*Section(header: Text("Sets")) {
@@ -48,7 +48,7 @@ struct ExerciseDetailView: View {
                 
                
             }*/
-            Section(header: Text("Sets")) {
+            Section(header: Text("sets")) {
             
                 ForEach(exercise.eSet) { eset in
              
@@ -68,13 +68,14 @@ struct ExerciseDetailView: View {
                 SetEditView(data: $newSet)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Dismiss") {
+                            Button("dismiss") {
                                 isPresentingNewSetView = false
+                                newSet = Set.FormData()
                                 
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("Add") {
+                            Button("add") {
                                 let set = Set(data: newSet)
                                 sets.append(set)
                                 exercise.updateSet(set: set)
@@ -96,12 +97,12 @@ struct ExerciseDetailView: View {
                     .navigationTitle(exercise.name)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Cancel") {
+                            Button("cancel") {
                                 isPresentingEditView = false
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("Done") {
+                            Button("done") {
                                 Task {
                                     await exercise.update(from: data) {
                                         isSuccess in
@@ -118,7 +119,7 @@ struct ExerciseDetailView: View {
             }
         }
         .toolbar {
-                    Button("Edit") {
+                    Button("edit") {
                         isPresentingEditView = true
                         data = exercise.data
                     }

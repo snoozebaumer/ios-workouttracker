@@ -14,9 +14,9 @@ struct ExerciseEditView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Exercise Details")) {
-                TextField("Name", text: $data.name)
-                TextField("Category", text: $data.categoryName)
+            Section(header: Text("exercise-details")) {
+                TextField("name", text: $data.name)
+                TextField("category", text: $data.categoryName)
 
             }
         }

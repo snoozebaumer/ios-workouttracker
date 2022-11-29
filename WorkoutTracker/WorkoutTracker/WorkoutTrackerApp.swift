@@ -37,7 +37,7 @@ struct WorkoutTrackerApp: App {
                 }
             }
             .toast(isPresenting: $errorLoading, duration: 5) {
-                AlertToast(displayMode: .banner(.slide), type: .error(.red), title: error?.localizedDescription ?? "Server error, please try again later.", subTitle: "Features may be restricted during usage.")
+                AlertToast(displayMode: .banner(.slide), type: .error(.red), title: NSLocalizedString("server-error-default", comment: "Title of the server error alert toast"), subTitle: NSLocalizedString("features-restricted", comment: "Message that features may be restricted"))
             }
         }
     }

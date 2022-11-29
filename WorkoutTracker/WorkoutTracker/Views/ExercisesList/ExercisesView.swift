@@ -27,10 +27,10 @@ struct ExercisesView: View {
                         selectedExercise = exercise
                         isPresentingConfirmDeletionView = true
                     } label: {
-                        Label("Delete Exercise",systemImage: "trash")
+                        Label("delete-exercise",systemImage: "trash")
                     }
-                }.alert(String(format: NSLocalizedString("Are you sure you want to delete exercise \"%@\"?", comment: ""), selectedExercise?.name ?? ""), isPresented: $isPresentingConfirmDeletionView) {
-                    Button("Delete Exercise", role: .destructive) {
+                }.alert(String(format: NSLocalizedString("deletion-confirmation", comment: "The deletion confirmation dialog for exercises"), selectedExercise?.name ?? ""), isPresented: $isPresentingConfirmDeletionView) {
+                    Button(NSLocalizedString("delete-exercise", comment: "Second deletion confirmation button"), role: .destructive) {
                         ExercisesService.delete(id: selectedExercise!.id) { didAlsoDeleteCategory in
                             let index: Int? = exercises.firstIndex(where: {selectedExercise!.id == $0.id})
                             
@@ -51,7 +51,7 @@ struct ExercisesView: View {
                 }
             }
         }
-        .navigationTitle("Exercises")
+        .navigationTitle("exercises")
         .toolbar {
             //plus button did not show without this placement
             ToolbarItemGroup(placement: .navigationBarTrailing){
@@ -75,13 +75,13 @@ struct ExercisesView: View {
                 ExerciseEditView(data: $newExercise, hasConnectionError: $errorInExerciseEditView)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                     Button("Dismiss") {
+                     Button(NSLocalizedString("dismiss", comment: "Dismiss Button")) {
                          isPresentingNewExerciseView = false
                          newExercise = Exercise.FormData()
                                                     }
                                                 }
                         ToolbarItem(placement: .confirmationAction) {
-                                                    Button("Add") {
+                                                    Button(NSLocalizedString("add", comment: "Add Button")) {
                                                         let exercise = Exercise(data: newExercise)
                                                         ExercisesService.save(exercise: exercise) {isSuccess in
                                                             if(isSuccess) {
