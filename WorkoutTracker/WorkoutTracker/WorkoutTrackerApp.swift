@@ -10,11 +10,18 @@ import AlertToast
 
 @main
 struct WorkoutTrackerApp: App {
+   
+    
     @StateObject var exercisesContext = ExercisesService()
     /*Why parameter set is necesarry here?*/
     @State var sets: [Set] = []
     @State var errorLoading = false;
     @State var error: Error? = nil
+
+ 
+    
+    
+    
     var body: some Scene {
         WindowGroup {
             NavigationView {
