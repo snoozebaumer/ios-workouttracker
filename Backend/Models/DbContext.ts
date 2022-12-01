@@ -34,7 +34,7 @@ export class DbContext {
             if (!category) {
                 throw TypeError();
             }
-            return new Exercise(value.Id, value.Name, category);
+            return new Exercise(value.Id, value.Name, category, value.sizeUnit, value.lengthUnit);
         });
 
         return this.exercises;
@@ -48,11 +48,12 @@ export class DbContext {
         }
 
         let sql = `INSERT INTO Exercises
-                       (Id, Name, CategoryId)
-                   VALUES (?, ?, ?)`
+                       (Id, Name, CategoryId, SizeUnit, LengthUnit)
+                   VALUES (?, ?, ?, ?, ?)`
 
         try {
-            await this.executeInDb(sql, [exercise.id, exercise.name, exercise.category.id]);
+            await this.executeInDb(sql, [exercise.id, exercise.name, exercise.category.id,
+                exercise.sizeUnit, exercise.lengthUnit]);
             this.exercises.push(exercise);
             isSuccess = true;
         } catch (e) {
@@ -71,11 +72,12 @@ export class DbContext {
         }
 
         let sql = `UPDATE Exercises
-                      SET Name=?, CategoryId=?
+                      SET Name=?, CategoryId=?, SizeUnit=?, LengthUnit=?
                       WHERE Id=?;`
 
         try {
-            await this.executeInDb(sql, [exercise.name, exercise.category.id, exercise.id]);
+            await this.executeInDb(sql, [exercise.name, exercise.category.id,
+                exercise.sizeUnit, exercise.lengthUnit, exercise.id]);
             let index = this.exercises.findIndex((value) => value.id == exercise.id);
             this.exercises[index] = exercise;
             isSuccess = true;
@@ -168,10 +170,15 @@ export class DbContext {
         });
     }
 
-    private async getExercises(): Promise<Array<{Id: string, Name: string, CategoryId: String}>> {
-        return new Promise<Array<{Id: string, Name: string, CategoryId: String}>>((resolve, reject) => {
+    private async getExercises(): Promise<Array<{Id: string, Name: string, CategoryId: String,
+                                                sizeUnit: number, lengthUnit: number}>> {
+        return new Promise<Array<{Id: string, Name: string, CategoryId: String,
+            sizeUnit: number, lengthUnit: number}>>((resolve, reject) => {
             this.connection.query(`SELECT * FROM Exercises`,
-                function (err: any, data: Array<{Id: string, Name: string, CategoryId: String}>) {
+                (err: any, data: Array<{
+                    Id: string, Name: string, CategoryId: String,
+                    sizeUnit: number, lengthUnit: number
+                }>) => {
                     if (err) {
                         reject(err);
                     } else {

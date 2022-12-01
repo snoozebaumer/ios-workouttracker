@@ -18,3 +18,13 @@
 "size" = "How much";
 "length" = "How long";
 "workload" = "Workload";
+"sizeUnit" = "Size Unit";
+"lengthUnit" = "Length Unit";
+"kilograms" = "Kilogram";
+"pounds" = "Pound";
+"kilometres" = "Kilometre";
+"miles" = "Mile";
+"reps" = "Repetitions";
+"minutes" = "Minutes";
+"seconds" = "Seconds";
+"metres" = "Metre";

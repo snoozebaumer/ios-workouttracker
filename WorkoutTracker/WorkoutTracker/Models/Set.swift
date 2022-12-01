@@ -8,6 +8,7 @@
 import Foundation
 
 struct Set: Equatable, Identifiable, Codable {
+    
     let id: UUID
     var name: String
     //var excercise: Exercise
@@ -72,7 +73,11 @@ extension Set {
         
     }
     
-    struct Sets: Identifiable, Codable, Hashable {
+    struct Sets: Identifiable, Codable, Hashable, Comparable {
+        static func < (lhs: Set.Sets, rhs: Set.Sets) -> Bool {
+            lhs.howmuch < rhs.howmuch
+        }
+        
         var id: UUID
         var howmuch: Float
         var howlong: Float

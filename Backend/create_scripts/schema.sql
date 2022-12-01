@@ -12,6 +12,8 @@ CREATE TABLE `WorkoutTracker`.`Exercises` (
                                               `Id` VARCHAR(36) NOT NULL,
                                               `Name` VARCHAR(255) NULL,
                                               `CategoryId` VARCHAR(36) NOT NULL,
+                                              `SizeUnit` INT NOT NULL,
+                                              `LengthUnit` INT NOT NULL,
                                               PRIMARY KEY (`Id`),
                                               INDEX `FK_Category_idx` (`CategoryId` ASC) VISIBLE,
                                               CONSTRAINT `FK_Category`

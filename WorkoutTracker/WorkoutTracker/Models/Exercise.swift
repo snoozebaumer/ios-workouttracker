@@ -12,15 +12,37 @@ struct Exercise: Identifiable, Codable {
     var name: String
     var category: Category
     var eSet: [Set] = []
+    var sizeUnit: SizeUnit = .kg
+    var lengthUnit: LengthUnit = .reps
   
-
  
     
-    init(id: UUID = UUID(), title: String, category: Category) {
+    init(id: UUID = UUID(), title: String, category: Category, sizeUnit: SizeUnit = .kg, lengthUnit: LengthUnit = .reps) {
         self.id = id
         self.name = title
         self.category = category
-       
+        self.sizeUnit = sizeUnit
+        self.lengthUnit = lengthUnit
+    }
+    
+    //get the most weight or highest amount of whatever unit to display in ExerciseListItemView
+    func getStrongestSetString() -> String {
+        if(self.eSet.count == 0) {
+            return ""
+        }
+        
+        let maxes: [Float] = self.eSet.map { set in
+            guard let max = set.sets.max()?.howmuch
+            else {
+                return 0
+            }
+            return max
+        }
+        
+        if(maxes.max() == 0) {
+            return ""
+        }
+        return NSString(format: "%.0f", maxes.max()!) as String
     }
     
 
@@ -61,16 +83,19 @@ extension Exercise {
         }
         self.category = existingCategory ?? Category(name: data.categoryName)
         Exercise.categories.append(self.category)
-        
+        self.sizeUnit = data.sizeUnit
+        self.lengthUnit = data.lengthUnit
     }
     
     struct FormData {
         var name: String = ""
         var categoryName: String = ""
+        var sizeUnit: SizeUnit = .kg
+        var lengthUnit: LengthUnit = .reps
     }
     
     var data: FormData {
-        FormData(name: name, categoryName: category.name)
+        FormData(name: name, categoryName: category.name, sizeUnit: sizeUnit, lengthUnit: lengthUnit)
     }
     
     mutating func update(from data: FormData, completion:@escaping(_ isSuccess: Bool) -> ()) async {
@@ -79,7 +104,7 @@ extension Exercise {
         }
         
         let category = existingCategory ?? Category(name: data.categoryName)
-        let savingExercise: Exercise = Exercise(id: self.id, title: data.name, category: category)
+        let savingExercise: Exercise = Exercise(id: self.id, title: data.name, category: category, sizeUnit: data.sizeUnit, lengthUnit: data.lengthUnit)
         
         if (existingCategory == nil) {
             Exercise.categories.append(self.category)
@@ -88,6 +113,8 @@ extension Exercise {
         if (isSuccess) {
             self.name = data.name
             self.category = category
+            self.sizeUnit = data.sizeUnit
+            self.lengthUnit = data.lengthUnit
         }
         completion(isSuccess)
     }

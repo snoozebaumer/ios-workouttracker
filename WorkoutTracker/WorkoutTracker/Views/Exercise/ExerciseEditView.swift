@@ -17,7 +17,17 @@ struct ExerciseEditView: View {
             Section(header: Text("exercise-details")) {
                 TextField("name", text: $data.name)
                 TextField("category", text: $data.categoryName)
-
+                Picker("sizeUnit", selection: $data.sizeUnit) {
+                    ForEach(SizeUnit.allCases, id: \.self) {value in
+                        Text(NSLocalizedString(value.localizableKey, comment: "Localization of enum value")).tag(value)
+                    }
+                }
+                
+                Picker("lengthUnit", selection: $data.lengthUnit) {
+                    ForEach(LengthUnit.allCases, id: \.self) {value in
+                        Text(NSLocalizedString(value.localizableKey, comment: "Localization of enum value")).tag(value)
+                    }
+                }
             }
         }
         .toast(isPresenting: $hasConnectionError, duration: 0) {

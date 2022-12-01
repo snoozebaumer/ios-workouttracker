@@ -18,3 +18,14 @@
 "size" = "Einheit";
 "length" = "Dauer";
 "workload" = "Tagesverlauf";
+"sizeUnit" = "Grössenangabe";
+"lengthUnit" = "Längenangabe";
+"kilograms" = "Kilogramm";
+"pounds" = "Pfund";
+"kilometres" = "Kilometer";
+"miles" = "Meile";
+"reps" = "Repetitionen";
+"minutes" = "Minuten";
+"seconds" = "Sekunden";
+"kilometres" = "Kilometer";
+"metres" = "Meter";

@@ -29,14 +29,6 @@ struct ExerciseDetailView: View {
     @State private var isPresentingConfirmSetDeletionView = false
 
     
-    
-    
- 
-
-    
-    
-    
-    
     //same as above to add sets
     
     var body: some View {
@@ -46,6 +38,16 @@ struct ExerciseDetailView: View {
                                     Label("category", systemImage: "figure.arms.open")
                                     Spacer()
                     Text(exercise.category.name)
+                                }
+                HStack {
+                                    Label("sizeUnit", systemImage: "scalemass.fill")
+                                    Spacer()
+                    Text(NSLocalizedString(exercise.sizeUnit.localizableKey, comment: "Localization of Sizeunit"))
+                                }
+                HStack {
+                                    Label("lengthUnit", systemImage: "stopwatch.fill")
+                                    Spacer()
+                    Text(NSLocalizedString(exercise.lengthUnit.localizableKey, comment: "Localization of LengthUnit"))
                                 }
             }
             Button("new-set") {
