@@ -7,7 +7,9 @@
 "exercises" = "Übungen";
 "dismiss" = "Abbrechen";
 "delete-exercise" = "Übung löschen";
+"delete-set" = "Satz löschen";
 "deletion-confirmation" = "Sind Sie sicher, dass sie die Übung \"%@\" löschen möchten?";
+"deletion-confirmation-set" = "Sind Sie sicher, dass Sie diesen Satz löschen möchten?";
 "new-set" = "Neuer Satz";
 "sets" = "Sätze";
 "cancel" = "Abbrechen";

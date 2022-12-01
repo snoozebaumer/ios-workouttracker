@@ -21,9 +21,9 @@ struct SetsEditView: View {
             Section(header: Text(data.name)){
                 ForEach($data.sets) { $set in
                     HStack{
-                    TextField("How Much", value: $set.howmuch, format: .number)
+                    TextField("size", value: $set.howmuch, format: .number)
                     padding()
-                    TextField("How Much", value: $set.howlong, format: .number)
+                    TextField("size", value: $set.howlong, format: .number)
                         Button( action: {
                             if let index = data.sets.firstIndex(of: set) {
                                 data.sets.remove(at: index)
@@ -38,9 +38,9 @@ struct SetsEditView: View {
           
             }
             HStack {
-                TextField("How Much", value: $newHowMuch, format: .number)
+                TextField("size", value: $newHowMuch, format: .number)
                 padding()
-                TextField("How Long", value: $newHowLong, format: .number)
+                TextField("length", value: $newHowLong, format: .number)
                 Button(action: {
                     withAnimation{
                         let newhm = newHowMuch

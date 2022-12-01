@@ -76,6 +76,8 @@ export class DbContext {
 
         try {
             await this.executeInDb(sql, [exercise.name, exercise.category.id, exercise.id]);
+            let index = this.exercises.findIndex((value) => value.id == exercise.id);
+            this.exercises[index] = exercise;
             isSuccess = true;
         } catch (e) {
             console.log(e);
@@ -97,6 +99,8 @@ export class DbContext {
         if(result.affectedRows === 0) {
             throw Error();
         }
+        let index = this.exercises.findIndex((value: Exercise) => value.id == id);
+        this.exercises.splice(index, 1);
 
         return await this.tryDeleteCategory(categoryResult[0].CategoryId);
     }

@@ -52,7 +52,7 @@ struct ExerciseDetailView: View {
                 isPresentingNewSetView = true
             }
          
-            Section(header: Text("Sets")) {
+            Section(header: Text("sets")) {
             
                 ForEach($exercise.eSet) { $eset in
                     
@@ -65,11 +65,11 @@ struct ExerciseDetailView: View {
                             selectedSet = eset
                             isPresentingConfirmSetDeletionView = true
                         } label: {
-                            Label("Delete Set",systemImage: "trash")
+                            Label("delete-set",systemImage: "trash")
                             
                         }
-                        }.alert(String("Are you sure you want to delete this set"), isPresented: $isPresentingConfirmSetDeletionView) {
-                            Button("Delete Set", role: .destructive) {
+                    }.alert(NSLocalizedString("deletion-confirmation-set", comment: "Deletion confirmation for Set"), isPresented: $isPresentingConfirmSetDeletionView) {
+                            Button("delete-set", role: .destructive) {
                                 //To-Do: Implement like deleteexercise once server for set is implemented
                                 let index: Int? = exercise.eSet.firstIndex(where: {eset.id == $0.id})
                                 exercise.eSet.remove(at: index!)
@@ -155,13 +155,13 @@ struct ExerciseDetailView: View {
                 SetsEditView(data: $cSet)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
-                            Button("Dismiss") {
+                            Button("cancel") {
                                 isPresentigSetsEditView = false
                                 
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
-                            Button("Update") {
+                            Button("done") {
                                 exercise.changeSet(originalSet: oSet, changedSet: cSet)
                                 isPresentigSetsEditView = false
         
