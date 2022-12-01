@@ -13,11 +13,25 @@ struct ExerciseDetailView: View {
     @State private var isPresentingEditView = false
     @State private var errorInExerciseEditView = false;
     
+        
     @Binding var sets: [Set]
     @State private var isPresentingNewSetView = false;
     @State private var newSet = Set.FormData()
+    @State private var isPresentigSetEditView = false;
     
-    //@State private var newSet = Exercise.SetFormData()
+    @State var cSet : Set = Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2])
+    @State var oSet : Set = Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2])
+
+    
+    
+    @State private var isPresentigSetsEditView = false;
+    @State var selectedSet: Set? = nil
+    @State private var isPresentingConfirmSetDeletionView = false
+
+    
+    
+    
+ 
 
     
     
@@ -37,30 +51,42 @@ struct ExerciseDetailView: View {
             Button("new-set") {
                 isPresentingNewSetView = true
             }
-            /*Section(header: Text("Sets")) {
+         
+            Section(header: Text("Sets")) {
             
-                    ForEach(sets) { Set in
-             
-                            SetListItemView(set: Set)
-                     
-                         }
-                
-                
-               
-            }*/
-            Section(header: Text("sets")) {
-            
-                ForEach(exercise.eSet) { eset in
-             
-                    SetListItemView(set: .constant(eset))
-                     
-                         }
+                ForEach($exercise.eSet) { $eset in
+                    
+                    SetListItemView(set: $eset).onTapGesture{
+                            cSet = eset
+                            oSet = cSet
+                            isPresentigSetsEditView = true
+                    }.contextMenu{
+                        Button(role: .destructive) {
+                            selectedSet = eset
+                            isPresentingConfirmSetDeletionView = true
+                        } label: {
+                            Label("Delete Set",systemImage: "trash")
+                            
+                        }
+                        }.alert(String("Are you sure you want to delete this set"), isPresented: $isPresentingConfirmSetDeletionView) {
+                            Button("Delete Set", role: .destructive) {
+                                //To-Do: Implement like deleteexercise once server for set is implemented
+                                let index: Int? = exercise.eSet.firstIndex(where: {eset.id == $0.id})
+                                exercise.eSet.remove(at: index!)
+                             
+                                
+                            }
+                        }
+                    }
+                         
+                }
+                            
                 
                 
                
             }
-        }
         .navigationTitle(exercise.name)
+     
         
         // Sheet to add sets
         .sheet(isPresented: $isPresentingNewSetView) {
@@ -77,7 +103,7 @@ struct ExerciseDetailView: View {
                         ToolbarItem(placement: .confirmationAction) {
                             Button("add") {
                                 let set = Set(data: newSet)
-                                sets.append(set)
+                                //sets.append(set)
                                 exercise.updateSet(set: set)
                                 newSet = Set.FormData()
                                 isPresentingNewSetView = false
@@ -89,8 +115,7 @@ struct ExerciseDetailView: View {
             }
         }
         
-        
-        
+    
         .sheet(isPresented: $isPresentingEditView) {
             NavigationView {
                 ExerciseEditView(data: $data, hasConnectionError: $errorInExerciseEditView)
@@ -124,8 +149,34 @@ struct ExerciseDetailView: View {
                         data = exercise.data
                     }
                 }
+        
+        .sheet(isPresented: $isPresentigSetsEditView) {
+            NavigationView {
+                SetsEditView(data: $cSet)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("Dismiss") {
+                                isPresentigSetsEditView = false
+                                
+                            }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("Update") {
+                                exercise.changeSet(originalSet: oSet, changedSet: cSet)
+                                isPresentigSetsEditView = false
+        
+                                
+                            }
+                        }
+                    }
+                
+            }
+        }
     }
-}
+    
+   
+    
+
 
 struct ExerciseDetailView_Previews: PreviewProvider {
     static var previews: some View {
@@ -133,4 +184,6 @@ struct ExerciseDetailView_Previews: PreviewProvider {
             ExerciseDetailView(exercise: .constant(ExercisesService.sampleData.exercises[0]), sets: .constant(Set.sampleData))
         }
     }
+
+}
 }

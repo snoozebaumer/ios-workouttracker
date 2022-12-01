@@ -21,12 +21,33 @@ struct Exercise: Identifiable, Codable {
         self.name = title
         self.category = category
        
-      
-        
     }
     
+
     mutating func updateSet(set: Set){
         eSet.append(set)
+    }
+    
+    //change a set
+    mutating func changeSet(originalSet: Set, changedSet: Set){
+        if let index = eSet.firstIndex(of: originalSet) {
+            eSet.remove(at: index)
+            eSet.insert(changedSet, at: index)
+        }
+    }
+    
+ 
+}
+
+extension Exercise {
+    
+    struct changeSetData {
+        var eSet : [Set] = []
+
+    }
+    
+    var changesetdata: changeSetData {
+        changeSetData(eSet: eSet)
     }
     
 }

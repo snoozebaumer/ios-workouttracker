@@ -22,6 +22,7 @@
 		19C72495292C0F9400C86947 /* ExercisesService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19C72494292C0F9400C86947 /* ExercisesService.swift */; };
 		19E119DF292A8FC4002A43E8 /* Set.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E119DE292A8FC4002A43E8 /* Set.swift */; };
 		2E43445D29311555000CCF27 /* SetListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E43445C29311555000CCF27 /* SetListItemView.swift */; };
+		2E6F3AD92936601700E0A59E /* SetsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6F3AD82936601700E0A59E /* SetsEditView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +42,7 @@
 		19C72494292C0F9400C86947 /* ExercisesService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExercisesService.swift; sourceTree = "<group>"; };
 		19E119DE292A8FC4002A43E8 /* Set.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Set.swift; sourceTree = "<group>"; };
 		2E43445C29311555000CCF27 /* SetListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetListItemView.swift; sourceTree = "<group>"; };
+		2E6F3AD82936601700E0A59E /* SetsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsEditView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +119,7 @@
 			children = (
 				19943FFA292A90860044C487 /* SetEditView.swift */,
 				2E43445C29311555000CCF27 /* SetListItemView.swift */,
+				2E6F3AD82936601700E0A59E /* SetsEditView.swift */,
 			);
 			path = Set;
 			sourceTree = "<group>";
@@ -222,6 +225,7 @@
 				196157F42923DE510021D7D1 /* ExerciseEditView.swift in Sources */,
 				19C72495292C0F9400C86947 /* ExercisesService.swift in Sources */,
 				196157EA2923C8230021D7D1 /* Category.swift in Sources */,
+				2E6F3AD92936601700E0A59E /* SetsEditView.swift in Sources */,
 				196157E72923C7190021D7D1 /* Exercise.swift in Sources */,
 				19943FFB292A90860044C487 /* SetEditView.swift in Sources */,
 				196157EC2923D1050021D7D1 /* ExerciseListItemView.swift in Sources */,

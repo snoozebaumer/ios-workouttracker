@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Set: Identifiable, Codable {
+struct Set: Equatable, Identifiable, Codable {
     let id: UUID
     var name: String
     //var excercise: Exercise
@@ -83,6 +83,12 @@ extension Set {
             self.howlong = howlong
             
         }
+        
+        
+        mutating func updateSets(changeHowmuch: Float, changeHowlong: Float) {
+            howmuch = changeHowmuch
+            howlong = changeHowlong
+        }
     }
     
 
@@ -96,17 +102,21 @@ extension Set {
     
     mutating func update(from data: FormData) {
             sets = data.sets
-            
     }
+    
+    
 }
 
 
 
 extension Set {
-    static let sampleData: [Set] =
-    [
-        Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2]),
-       
+    static let sampleData: [Set] = [
+    
+        Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2])
         
-    ]
+        ]
+    
+    
 }
+    
+

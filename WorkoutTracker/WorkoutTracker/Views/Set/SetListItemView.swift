@@ -43,5 +43,5 @@ struct SetListItemView: View {
 /*struct SetListItemView_Previews: PreviewProvider {
     static var previews: some View {
         SetListItemView(set: Set.sampleData[0])
-    }*/
-
+    }
+}*/

@@ -15,6 +15,8 @@ struct ExercisesView: View {
     @State private var isPresentingConfirmDeletionView = false
     @State var selectedExercise: Exercise? = nil
     @Binding var set: [Set]
+  
+    
     
     
     var body: some View {
