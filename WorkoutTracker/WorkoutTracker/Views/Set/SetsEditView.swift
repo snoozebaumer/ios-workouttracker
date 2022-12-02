@@ -13,17 +13,19 @@ struct SetsEditView: View {
     @Binding var data: Set
     @State var newHowMuch : Float = 0
     @State var newHowLong : Float = 0
-    
-
+    let sizeUnit: SizeUnit
+    let lengthUnit: LengthUnit
     
     var body: some View {
         Form {
             Section(header: Text(data.name)){
                 ForEach($data.sets) { $set in
-                    HStack{
+                    HStack(spacing: 5){
                     TextField("size", value: $set.howmuch, format: .number)
+                        Text(sizeUnit.short).font(.caption)
                     padding()
                     TextField("size", value: $set.howlong, format: .number)
+                        Text(lengthUnit.short).font(.caption)
                         Button( action: {
                             if let index = data.sets.firstIndex(of: set) {
                                 data.sets.remove(at: index)
@@ -37,10 +39,12 @@ struct SetsEditView: View {
                     }
           
             }
-            HStack {
+                HStack(spacing: 5) {
                 TextField("size", value: $newHowMuch, format: .number)
+                    Text(sizeUnit.short).font(.caption)
                 padding()
                 TextField("length", value: $newHowLong, format: .number)
+                    Text(lengthUnit.short).font(.caption)
                 Button(action: {
                     withAnimation{
                         let newhm = newHowMuch
@@ -64,7 +68,7 @@ struct SetsEditView: View {
     
     struct SetsEditView_Previews: PreviewProvider {
         static var previews: some View {
-            SetsEditView(data: .constant(Set.sampleData[0]))
+            SetsEditView(data: .constant(Set.sampleData[0]), sizeUnit: .lb, lengthUnit: .reps)
         }
     }}
 

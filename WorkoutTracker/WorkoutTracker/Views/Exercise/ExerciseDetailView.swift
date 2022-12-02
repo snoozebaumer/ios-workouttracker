@@ -13,21 +13,21 @@ struct ExerciseDetailView: View {
     @State private var isPresentingEditView = false
     @State private var errorInExerciseEditView = false;
     
-        
+    
     @Binding var sets: [Set]
     @State private var isPresentingNewSetView = false;
     @State private var newSet = Set.FormData()
     @State private var isPresentigSetEditView = false;
     
-    @State var cSet : Set = Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2])
-    @State var oSet : Set = Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2])
-
+    @State var changedSet : Set = Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2])
+    @State var originalSet : Set = Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2])
+    
     
     
     @State private var isPresentigSetsEditView = false;
     @State var selectedSet: Set? = nil
     @State private var isPresentingConfirmSetDeletionView = false
-
+    
     
     //same as above to add sets
     
@@ -35,33 +35,33 @@ struct ExerciseDetailView: View {
         List {
             Section(header: Text("exercise-details")) {
                 HStack {
-                                    Label("category", systemImage: "figure.arms.open")
-                                    Spacer()
+                    Label("category", systemImage: "figure.arms.open")
+                    Spacer()
                     Text(exercise.category.name)
-                                }
+                }
                 HStack {
-                                    Label("sizeUnit", systemImage: "scalemass.fill")
-                                    Spacer()
+                    Label("sizeUnit", systemImage: "scalemass.fill")
+                    Spacer()
                     Text(NSLocalizedString(exercise.sizeUnit.localizableKey, comment: "Localization of Sizeunit"))
-                                }
+                }
                 HStack {
-                                    Label("lengthUnit", systemImage: "stopwatch.fill")
-                                    Spacer()
+                    Label("lengthUnit", systemImage: "stopwatch.fill")
+                    Spacer()
                     Text(NSLocalizedString(exercise.lengthUnit.localizableKey, comment: "Localization of LengthUnit"))
-                                }
+                }
             }
             Button("new-set") {
                 isPresentingNewSetView = true
             }
-         
+            
             Section(header: Text("sets")) {
             
                 ForEach($exercise.eSet) { $eset in
                     
-                    SetListItemView(set: $eset).onTapGesture{
-                            cSet = eset
-                            oSet = cSet
-                            isPresentigSetsEditView = true
+                    SetListItemView(set: $eset, lengthUnit: exercise.lengthUnit, sizeUnit: exercise.sizeUnit).onTapGesture{
+                        changedSet = eset
+                        originalSet = changedSet
+                        isPresentigSetsEditView = true
                     }.contextMenu{
                         Button(role: .destructive) {
                             selectedSet = eset
@@ -71,29 +71,29 @@ struct ExerciseDetailView: View {
                             
                         }
                     }.alert(NSLocalizedString("deletion-confirmation-set", comment: "Deletion confirmation for Set"), isPresented: $isPresentingConfirmSetDeletionView) {
-                            Button("delete-set", role: .destructive) {
-                                //To-Do: Implement like deleteexercise once server for set is implemented
-                                let index: Int? = exercise.eSet.firstIndex(where: {eset.id == $0.id})
-                                exercise.eSet.remove(at: index!)
-                             
-                                
-                            }
+                        Button("delete-set", role: .destructive) {
+                            //To-Do: Implement like deleteexercise once server for set is implemented
+                            let index: Int? = exercise.eSet.firstIndex(where: {eset.id == $0.id})
+                            exercise.eSet.remove(at: index!)
+                            
+                            
                         }
                     }
-                         
                 }
-                            
                 
-                
-               
             }
+            
+            
+            
+            
+        }
         .navigationTitle(exercise.name)
-     
+        
         
         // Sheet to add sets
         .sheet(isPresented: $isPresentingNewSetView) {
             NavigationView {
-                SetEditView(data: $newSet)
+                SetEditView(data: $newSet, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("dismiss") {
@@ -109,7 +109,7 @@ struct ExerciseDetailView: View {
                                 exercise.updateSet(set: set)
                                 newSet = Set.FormData()
                                 isPresentingNewSetView = false
-        
+                                
                                 
                             }
                         }
@@ -117,7 +117,7 @@ struct ExerciseDetailView: View {
             }
         }
         
-    
+        
         .sheet(isPresented: $isPresentingEditView) {
             NavigationView {
                 ExerciseEditView(data: $data, hasConnectionError: $errorInExerciseEditView)
@@ -146,15 +146,15 @@ struct ExerciseDetailView: View {
             }
         }
         .toolbar {
-                    Button("edit") {
-                        isPresentingEditView = true
-                        data = exercise.data
-                    }
-                }
+            Button("edit") {
+                isPresentingEditView = true
+                data = exercise.data
+            }
+        }
         
         .sheet(isPresented: $isPresentigSetsEditView) {
             NavigationView {
-                SetsEditView(data: $cSet)
+                SetsEditView(data: $changedSet, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("cancel") {
@@ -164,9 +164,9 @@ struct ExerciseDetailView: View {
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("done") {
-                                exercise.changeSet(originalSet: oSet, changedSet: cSet)
+                                exercise.changeSet(originalSet: originalSet, changedSet: changedSet)
                                 isPresentigSetsEditView = false
-        
+                                
                                 
                             }
                         }
@@ -175,10 +175,7 @@ struct ExerciseDetailView: View {
             }
         }
     }
-    
-   
-    
-
+}
 
 struct ExerciseDetailView_Previews: PreviewProvider {
     static var previews: some View {
@@ -187,5 +184,4 @@ struct ExerciseDetailView_Previews: PreviewProvider {
         }
     }
 
-}
 }

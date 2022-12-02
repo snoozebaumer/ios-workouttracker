@@ -27,7 +27,7 @@ enum SizeUnit: Int, Codable, Equatable, CaseIterable {
     var short: String {
         switch self {
         case .kg: return "kg"
-        case .lb: return "lb"
+        case .lb: return "lbs"
         case .km: return "km"
         case .mi: return "mi"
         case .m: return "m"

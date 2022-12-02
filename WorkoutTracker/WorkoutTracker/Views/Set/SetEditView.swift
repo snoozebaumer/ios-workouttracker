@@ -13,19 +13,25 @@ struct SetEditView: View {
     @Binding var data: Set.FormData
     @State var newHowMuch : Float = 0
     @State var newHowLong : Float = 0
-    @State private var isPresentingSetsEditView = false;
+    @State private var isPresentingSetsEditView = false
+    let sizeUnit: SizeUnit
+    let lengthUnit: LengthUnit
 
     var body: some View {
             Form {
                 HStack {
                     VStack(alignment: .leading) {
-                        Text("size")
-                            .font(.caption)
+                        HStack(spacing: 5) {
+                            Text("size")
+                            Text("(" + sizeUnit.short + ")")
+                        }.font(.caption)
                         TextField("size", value: $newHowMuch, format: .number)
                     }
                     VStack(alignment: .leading) {
-                        Text("length")
-                            .font(.caption)
+                        HStack(spacing: 5) {
+                            Text("length")
+                            Text("(" + lengthUnit.short + ")")
+                        }.font(.caption)
                         TextField("length", value: $newHowLong, format: .number)
                     }
                     Button(action: {
@@ -45,7 +51,7 @@ struct SetEditView: View {
                 Section(header: Text("workload")){
                     ForEach(data.sets) { set in
                         HStack{
-                            Text(String(format: "%.2f", set.howmuch))
+                            Text(String(format: "%.2f", set.howmuch) + " " + sizeUnit.short)
                             padding()
                             Text(String(format: "%.2f", set.howlong))
                             Button( action: {
@@ -71,7 +77,7 @@ struct SetEditView: View {
     
     struct SetEditView_Previews: PreviewProvider {
         static var previews: some View {
-            SetEditView(data: .constant(Set.sampleData[0].data))
+            SetEditView(data: .constant(Set.sampleData[0].data), sizeUnit: .kg, lengthUnit: .reps)
         }
     }
 }

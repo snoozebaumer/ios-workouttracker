@@ -9,18 +9,21 @@ import SwiftUI
 
 struct SetListItemView: View {
     @Binding var set: Set
+    let lengthUnit: LengthUnit
+    let sizeUnit: SizeUnit
     
     var body: some View {
         VStack{
                  Text(set.name)
-                .font(.subheadline)
+                .font(.headline)
                  VStack {
                      ForEach(set.sets) {s in
                          HStack{
-                         Text(String(format: "%.2f", s.howmuch))
+                             Text(String(format: "%.1f", s.howmuch) + " " + sizeUnit.short)
                          Text(" x ")
-                         Text(String(format: "%.2f", s.howlong))
+                         Text(String(format: "%.2f", s.howlong) + " " + lengthUnit.short)
                          }
+                         .padding(.leading)
                      }
                      
                  }
@@ -40,8 +43,8 @@ struct SetListItemView: View {
     
 
 
-/*struct SetListItemView_Previews: PreviewProvider {
+struct SetListItemView_Previews: PreviewProvider {
     static var previews: some View {
-        SetListItemView(set: Set.sampleData[0])
+        SetListItemView(set: .constant(Set.sampleData[0]), lengthUnit: .reps, sizeUnit: .kg)
     }
-}*/
+}

@@ -23,4 +23,14 @@ enum LengthUnit: Int, Codable,Equatable, CaseIterable {
         case .m: return "metres"
         }
     }
+    
+    var short: String {
+        switch self {
+        case .reps: return "reps"
+        case .min: return "min"
+        case .sec: return "sec"
+        case .km: return "km"
+        case .m: return "m"
+        }
+    }
 }
