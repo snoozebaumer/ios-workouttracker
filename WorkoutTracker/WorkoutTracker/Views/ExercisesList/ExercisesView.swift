@@ -14,7 +14,7 @@ struct ExercisesView: View {
     @State private var errorInExerciseEditView = false
     @State private var isPresentingConfirmDeletionView = false
     @State var selectedExercise: Exercise? = nil
-    @Binding var set: [Set]
+    @Binding var set: [Workout]
   
     
     
@@ -107,7 +107,7 @@ struct ExercisesView: View {
 struct ExercisesView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExercisesView(exercises: .constant(ExercisesService.sampleData.exercises), set: .constant(Set.sampleData))
+            ExercisesView(exercises: .constant(ExercisesService.sampleData.exercises), set: .constant(Workout.sampleData))
         }
     }
 }

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Set: Equatable, Identifiable, Codable {
+struct Workout: Equatable, Identifiable, Codable {
     
     let id: UUID
     var name: String
@@ -52,7 +52,7 @@ struct Set: Equatable, Identifiable, Codable {
 }
 
 
-extension Set {
+extension Workout {
     init(id: UUID = UUID(), data: FormData) {
         self.id = id
         self.exerciseID = UUID()
@@ -73,7 +73,7 @@ extension Set {
     }
     
     struct Sets: Identifiable, Codable, Hashable, Comparable {
-        static func < (lhs: Set.Sets, rhs: Set.Sets) -> Bool {
+        static func < (lhs: Workout.Sets, rhs: Workout.Sets) -> Bool {
             lhs.howmuch < rhs.howmuch
         }
         
@@ -113,10 +113,10 @@ extension Set {
 
 
 
-extension Set {
-    static let sampleData: [Set] = [
+extension Workout {
+    static let sampleData: [Workout] = [
     
-        Set(sets:[4,2])
+        Workout(sets:[4,2])
         
         ]
     

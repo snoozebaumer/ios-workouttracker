@@ -10,7 +10,7 @@ import SwiftUI
 struct SetsEditView: View {
 
     
-    @Binding var data: Set
+    @Binding var data: Workout
     @State var newHowMuch : Float = 0
     @State var newHowLong : Float = 0
     let sizeUnit: SizeUnit
@@ -49,7 +49,7 @@ struct SetsEditView: View {
                     withAnimation{
                         let newhm = newHowMuch
                         let newhl = newHowLong
-                        let newset = Set.Sets(howmuch: newhm, howlong: newhl)
+                        let newset = Workout.Sets(howmuch: newhm, howlong: newhl)
                         data.sets.append(newset)
                         
                     }
@@ -68,7 +68,7 @@ struct SetsEditView: View {
     
     struct SetsEditView_Previews: PreviewProvider {
         static var previews: some View {
-            SetsEditView(data: .constant(Set.sampleData[0]), sizeUnit: .lb, lengthUnit: .reps)
+            SetsEditView(data: .constant(Workout.sampleData[0]), sizeUnit: .lb, lengthUnit: .reps)
         }
     }}
 

@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct SetListItemView: View {
-    @Binding var set: Set
+struct WorkoutListItemView: View {
+    @Binding var set: Workout
     let lengthUnit: LengthUnit
     let sizeUnit: SizeUnit
     
@@ -45,6 +45,6 @@ struct SetListItemView: View {
 
 struct SetListItemView_Previews: PreviewProvider {
     static var previews: some View {
-        SetListItemView(set: .constant(Set.sampleData[0]), lengthUnit: .reps, sizeUnit: .kg)
+        WorkoutListItemView(set: .constant(Workout.sampleData[0]), lengthUnit: .reps, sizeUnit: .kg)
     }
 }

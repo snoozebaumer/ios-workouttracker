@@ -14,7 +14,7 @@ struct WorkoutTrackerApp: App {
     
     @StateObject var exercisesContext = ExercisesService()
     /*Why parameter set is necesarry here?*/
-    @State var sets: [Set] = []
+    @State var sets: [Workout] = []
     @State var errorLoading = false;
     @State var error: Error? = nil
 

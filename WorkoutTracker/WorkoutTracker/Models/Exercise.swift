@@ -11,7 +11,7 @@ struct Exercise: Identifiable, Codable {
     let id: UUID
     var name: String
     var category: Category
-    var eSet: [Set] = []
+    var eSet: [Workout] = []
     var sizeUnit: SizeUnit = .kg
     var lengthUnit: LengthUnit = .reps
   
@@ -46,12 +46,12 @@ struct Exercise: Identifiable, Codable {
     }
     
 
-    mutating func updateSet(set: Set){
+    mutating func updateSet(set: Workout){
         eSet.append(set)
     }
     
     //change a set
-    mutating func changeSet(originalSet: Set, changedSet: Set){
+    mutating func changeSet(originalSet: Workout, changedSet: Workout){
         if let index = eSet.firstIndex(of: originalSet) {
             eSet.remove(at: index)
             eSet.insert(changedSet, at: index)
@@ -64,7 +64,7 @@ struct Exercise: Identifiable, Codable {
 extension Exercise {
     
     struct changeSetData {
-        var eSet : [Set] = []
+        var eSet : [Workout] = []
 
     }
     
