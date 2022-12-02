@@ -34,7 +34,7 @@ export class DbContext {
             if (!category) {
                 throw TypeError();
             }
-            return new Exercise(value.Id, value.Name, category, value.sizeUnit, value.lengthUnit);
+            return new Exercise(value.Id, value.Name, category, value.SizeUnit, value.LengthUnit);
         });
 
         return this.exercises;
@@ -171,13 +171,13 @@ export class DbContext {
     }
 
     private async getExercises(): Promise<Array<{Id: string, Name: string, CategoryId: String,
-                                                sizeUnit: number, lengthUnit: number}>> {
+                                                SizeUnit: number, LengthUnit: number}>> {
         return new Promise<Array<{Id: string, Name: string, CategoryId: String,
-            sizeUnit: number, lengthUnit: number}>>((resolve, reject) => {
+            SizeUnit: number, LengthUnit: number}>>((resolve, reject) => {
             this.connection.query(`SELECT * FROM Exercises`,
                 (err: any, data: Array<{
                     Id: string, Name: string, CategoryId: String,
-                    sizeUnit: number, lengthUnit: number
+                    SizeUnit: number, LengthUnit: number
                 }>) => {
                     if (err) {
                         reject(err);

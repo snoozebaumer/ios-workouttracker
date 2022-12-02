@@ -25,7 +25,7 @@ struct Exercise: Identifiable, Codable {
         self.lengthUnit = lengthUnit
     }
     
-    //get the most weight or highest amount of whatever unit to display in ExerciseListItemView
+    //get the highest amount of whatever unit to display in ExerciseListItemView
     func getStrongestSetString() -> String {
         if(self.eSet.count == 0) {
             return ""
