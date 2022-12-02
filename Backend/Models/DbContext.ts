@@ -1,6 +1,7 @@
 import * as mysql from "mysql"
 import {Exercise} from "./Exercise";
 import {Category} from "./Category";
+import {Workout} from "./Workout";
 import {Connection, OkPacket} from "mysql";
 
 export class DbContext {
@@ -11,6 +12,7 @@ export class DbContext {
 
     private exercises: Array<Exercise> = new Array<Exercise>();
     private categories: Array<Category> = new Array<Category>();
+    private workouts: Array<Workout> = new Array<Workout>();
     private connection: Connection;
 
     constructor() {
@@ -22,12 +24,16 @@ export class DbContext {
         })
     }
 
+  
     async get(): Promise<Array<Exercise>> {
+        
         if(this.exercises.length > 0) {
             return this.exercises;
         }
 
         this.categories = await this.getCategories();
+       //getWorkouts to be implemented
+       //get all workouts with foreign key=excercise.id and add them
         let exercisesDb = await this.getExercises();
         this.exercises = exercisesDb.map((value) => {
             let category = this.categories.find(c => c.id == value.CategoryId);
@@ -187,4 +193,29 @@ export class DbContext {
                 });
         });
     }
+
+
+
+    // --- WORKOUTS ---
+    async saveWorkout(workout: Workout): Promise<boolean> {
+        let isSuccess = false;
+        console.log("Hey")
+
+        let sql = `INSERT INTO Workouts
+                       (Id, Name, ExerciseId)
+                   VALUES (?, ?, ?)`
+
+        try {
+            await this.executeInDb(sql, [workout.id, workout.name, workout.exerciseID]);
+            this.workouts.push(workout);
+            isSuccess = true;
+        } catch (e) {
+            console.log(e)
+            isSuccess = false;
+        }
+
+        return isSuccess
+    }
+
+
 }

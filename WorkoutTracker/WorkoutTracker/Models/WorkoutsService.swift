@@ -12,7 +12,8 @@ class WorkoutsService : ObservableObject {
     
     
     static func save(workout: Workout, httpMethod: String = "POST", id: UUID? = nil ,completion:@escaping(_ isSuccess: Bool) -> ())  {
-        guard let url =  URL(string:"http://localhost:3000//" + (id?.uuidString ?? ""))
+ 
+        guard let url =  URL(string:"http://localhost:3000/workout/" + (id?.uuidString ?? ""))
         else{
             return
         }

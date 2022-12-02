@@ -6,11 +6,14 @@
 //
 
 import SwiftUI
+import AlertToast
+
 
 struct WorkoutEditView: View {
     //@Binding var data = Set.Data()
     //@State private var d
     @Binding var data: Workout.FormData
+    @Binding var hasConnectError: Bool
     @State var newHowMuch : Float = 0
     @State var newHowLong : Float = 0
     @State private var isPresentingSetsEditView = false
@@ -69,6 +72,8 @@ struct WorkoutEditView: View {
 
                     }
                 }
+            }.toast(isPresenting: $hasConnectError, duration: 0) {
+                AlertToast(displayMode: .banner(.slide), type: .error(.red), title: "Server error, please try again later.", subTitle: "Workout was not saved.")
             }
         }
 
@@ -77,7 +82,7 @@ struct WorkoutEditView: View {
     
     struct SetEditView_Previews: PreviewProvider {
         static var previews: some View {
-            WorkoutEditView(data: .constant(Workout.sampleData[0].data), sizeUnit: .kg, lengthUnit: .reps)
+            WorkoutEditView(data: .constant(Workout.sampleData[0].data), hasConnectError: .constant(false),sizeUnit: .kg, lengthUnit: .reps)
         }
     }
 }

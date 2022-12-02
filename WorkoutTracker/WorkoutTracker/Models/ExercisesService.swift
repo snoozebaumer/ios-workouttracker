@@ -15,7 +15,6 @@ class ExercisesService: ObservableObject {
         else{
             return
         }
-        
         let encodedData = try! JSONEncoder().encode(exercise)
         let jsonString = String(data: encodedData, encoding: .utf8)
         let postString = "exercise=" + jsonString!
@@ -35,6 +34,7 @@ class ExercisesService: ObservableObject {
             let httpResponse = response as! HTTPURLResponse
             let isSuccess = (httpResponse.statusCode == 200)
             completion(isSuccess)
+            
         }.resume()
     }
     

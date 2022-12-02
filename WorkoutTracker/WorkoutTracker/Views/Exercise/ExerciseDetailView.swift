@@ -28,6 +28,8 @@ struct ExerciseDetailView: View {
     @State var selectedSet: Workout? = nil
     @State private var isPresentingConfirmSetDeletionView = false
     
+    @State private var errorInNewWorkoutView = false
+    
     
     //same as above to add sets
     
@@ -93,7 +95,7 @@ struct ExerciseDetailView: View {
         // Sheet to add sets
         .sheet(isPresented: $isPresentingNewWorkoutView) {
             NavigationView {
-                WorkoutEditView(data: $newSet, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
+                WorkoutEditView(data: $newSet, hasConnectError: $errorInNewWorkoutView, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("dismiss") {
@@ -107,9 +109,23 @@ struct ExerciseDetailView: View {
                                 var workout = Workout(data: newSet)
                                 workout.updateExerciseID(from: exercise.id)
                                 let finalWorkout = workout
-                                exercise.updateSet(set: finalWorkout)
-                                newSet = Workout.FormData()
-                                isPresentingNewWorkoutView = false
+                                //exercise.updateSet(set: finalWorkout)
+                                //send Workout to server
+                                WorkoutsService.save(workout: finalWorkout) { isSucess in
+                                    if(isSucess) {
+                                        isPresentingNewWorkoutView = false
+                                        DispatchQueue.main.async {
+                                            exercise.updateSet(set: finalWorkout)
+                                        }
+                                        newSet = Workout.FormData()
+                                    } else {
+                                        errorInNewWorkoutView = true
+                                    }
+                                
+                                    
+                                }
+                                //newSet = Workout.FormData()
+                                //isPresentingNewWorkoutView = false
                                 
                                 
                             }

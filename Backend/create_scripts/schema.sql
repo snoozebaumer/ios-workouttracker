@@ -21,3 +21,15 @@ CREATE TABLE `WorkoutTracker`.`Exercises` (
                                                       REFERENCES `WorkoutTracker`.`Categories` (`Id`)
                                                       ON DELETE NO ACTION
                                                       ON UPDATE NO ACTION);
+
+ CREATE TABLE `WorkoutTracker`.`Workouts` (
+                                              `Id` VARCHAR(36) NOT NULL,
+                                              `Name` VARCHAR(255) NULL,
+                                              `ExerciseId` VARCHAR(255) NULL,
+                                              PRIMARY KEY (`Id`),
+                                              INDEX `FK_Exercise_idx` (`ExerciseId` ASC) VISIBLE,
+                                              CONSTRAINT `FK_Exercise`
+                                                  FOREIGN KEY (`ExerciseId`)
+                                                      REFERENCES `WorkoutTracker`.`Exercises` (`Id`)
+                                                      ON DELETE NO ACTION
+                                                      ON UPDATE NO ACTION);                                             

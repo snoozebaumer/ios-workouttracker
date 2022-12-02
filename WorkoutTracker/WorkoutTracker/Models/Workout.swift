@@ -49,6 +49,7 @@ struct Workout: Equatable, Identifiable, Codable {
         
     }
     
+    
 }
 
 
