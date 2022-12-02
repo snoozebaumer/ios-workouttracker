@@ -11,15 +11,13 @@ struct Set: Equatable, Identifiable, Codable {
     
     let id: UUID
     var name: String
-    //var excercise: Exercise
-    //var excercise: String
+    var exerciseID: UUID
     var sets : [Sets]
-   // var strength : Bool
-   // var metric : Bool
+
    
  
     
-    init(id: UUID = UUID(), /*excercise: Exercise*/ /*excercise:String, strenght: Bool, metric: Bool,*/ sets: [Float]) {
+    init(id: UUID = UUID(), sets: [Float]) {
         self.id = id
         func convertDateFormatter(date: Date) -> String {
              let date = Date()
@@ -44,7 +42,7 @@ struct Set: Equatable, Identifiable, Codable {
                 //diplay as 5mi / x{min}
             }
         }*/
-        
+        self.exerciseID = UUID()
         self.sets = []
         self.sets.append(Sets(howmuch: sets[0], howlong: sets[1]))
     
@@ -57,6 +55,7 @@ struct Set: Equatable, Identifiable, Codable {
 extension Set {
     init(id: UUID = UUID(), data: FormData) {
         self.id = id
+        self.exerciseID = UUID()
         func convertDateFormatter(date: Date) -> String {
              let date = Date()
              let formatter = DateFormatter()
@@ -105,8 +104,8 @@ extension Set {
         FormData(sets: sets)
     }
     
-    mutating func update(from data: FormData) {
-            sets = data.sets
+    mutating func updateExerciseID(from data: UUID) {
+        self.exerciseID = data
     }
     
     
@@ -117,7 +116,7 @@ extension Set {
 extension Set {
     static let sampleData: [Set] = [
     
-        Set(/*excercise: "Test", strenght: true, metric: true, */sets:[4,2])
+        Set(sets:[4,2])
         
         ]
     

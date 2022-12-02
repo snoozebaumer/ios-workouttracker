@@ -104,9 +104,10 @@ struct ExerciseDetailView: View {
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("add") {
-                                let set = Set(data: newSet)
-                                //sets.append(set)
-                                exercise.updateSet(set: set)
+                                var set = Set(data: newSet)
+                                set.updateExerciseID(from: exercise.id)
+                                let finalSet = set
+                                exercise.updateSet(set: finalSet)
                                 newSet = Set.FormData()
                                 isPresentingNewSetView = false
                                 
