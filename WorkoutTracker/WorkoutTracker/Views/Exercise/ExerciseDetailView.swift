@@ -15,9 +15,9 @@ struct ExerciseDetailView: View {
     
     
     @Binding var sets: [Workout]
-    @State private var isPresentingNewSetView = false;
+    @State private var isPresentingNewWorkoutView = false;
     @State private var newSet = Workout.FormData()
-    @State private var isPresentigSetEditView = false;
+    //@State private var isPresentigWorkoutEditView = false;
     
     @State var changedWorkout : Workout = Workout(sets:[4,2])
     @State var originalWorkout : Workout = Workout(sets:[4,2])
@@ -51,7 +51,7 @@ struct ExerciseDetailView: View {
                 }
             }
             Button("new-set") {
-                isPresentingNewSetView = true
+                isPresentingNewWorkoutView = true
             }
             
             Section(header: Text("sets")) {
@@ -91,13 +91,13 @@ struct ExerciseDetailView: View {
         
         
         // Sheet to add sets
-        .sheet(isPresented: $isPresentingNewSetView) {
+        .sheet(isPresented: $isPresentingNewWorkoutView) {
             NavigationView {
                 WorkoutEditView(data: $newSet, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("dismiss") {
-                                isPresentingNewSetView = false
+                                isPresentingNewWorkoutView = false
                                 newSet = Workout.FormData()
                                 
                             }
@@ -109,7 +109,7 @@ struct ExerciseDetailView: View {
                                 let finalWorkout = workout
                                 exercise.updateSet(set: finalWorkout)
                                 newSet = Workout.FormData()
-                                isPresentingNewSetView = false
+                                isPresentingNewWorkoutView = false
                                 
                                 
                             }
