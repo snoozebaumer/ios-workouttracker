@@ -11,27 +11,28 @@ struct Exercise: Identifiable, Codable {
     let id: UUID
     var name: String
     var category: Category
-    var eSet: [Workout] = []
+    var workouts: [Workout] = []
     var sizeUnit: SizeUnit = .kg
     var lengthUnit: LengthUnit = .reps
   
  
     
-    init(id: UUID = UUID(), title: String, category: Category, sizeUnit: SizeUnit = .kg, lengthUnit: LengthUnit = .reps) {
+    init(id: UUID = UUID(), title: String, category: Category, sizeUnit: SizeUnit = .kg, lengthUnit: LengthUnit = .reps, workouts: [Workout] = []) {
         self.id = id
         self.name = title
         self.category = category
         self.sizeUnit = sizeUnit
         self.lengthUnit = lengthUnit
+        self.workouts = workouts
     }
     
     //get the highest amount of whatever unit to display in ExerciseListItemView
     func getStrongestSetString() -> String {
-        if(self.eSet.count == 0) {
+        if(self.workouts.count == 0) {
             return ""
         }
         
-        let maxes: [Float] = self.eSet.map { set in
+        let maxes: [Float] = self.workouts.map { set in
             guard let max = set.sets.max()?.howmuch
             else {
                 return 0
@@ -46,15 +47,14 @@ struct Exercise: Identifiable, Codable {
     }
     
 
-    mutating func updateSet(set: Workout){
-        eSet.append(set)
+    mutating func updateWorkout(workout: Workout){
+        workouts.append(workout)
     }
     
-    //change a set
-    mutating func changeSet(originalSet: Workout, changedSet: Workout){
-        if let index = eSet.firstIndex(of: originalSet) {
-            eSet.remove(at: index)
-            eSet.insert(changedSet, at: index)
+    mutating func changeWorkout(originalWorkout: Workout, changedWorkout: Workout){
+        if let index = workouts.firstIndex(of: originalWorkout) {
+            workouts.remove(at: index)
+            workouts.insert(changedWorkout, at: index)
         }
     }
     
@@ -69,7 +69,7 @@ extension Exercise {
     }
     
     var changesetdata: changeSetData {
-        changeSetData(eSet: eSet)
+        changeSetData(eSet: workouts)
     }
     
 }
@@ -104,7 +104,7 @@ extension Exercise {
         }
         
         let category = existingCategory ?? Category(name: data.categoryName)
-        let savingExercise: Exercise = Exercise(id: self.id, title: data.name, category: category, sizeUnit: data.sizeUnit, lengthUnit: data.lengthUnit)
+        let savingExercise: Exercise = Exercise(id: self.id, title: data.name, category: category,sizeUnit: data.sizeUnit, lengthUnit: data.lengthUnit, workouts: self.workouts)
         
         if (existingCategory == nil) {
             Exercise.categories.append(self.category)

@@ -12,7 +12,7 @@ struct Workout: Equatable, Identifiable, Codable {
     let id: UUID
     var name: String
     var exerciseID: UUID
-    var sets : [Sets]
+    var sets : [Set]
 
    
  
@@ -44,7 +44,7 @@ struct Workout: Equatable, Identifiable, Codable {
         }*/
         self.exerciseID = UUID()
         self.sets = []
-        self.sets.append(Sets(howmuch: sets[0], howlong: sets[1]))
+        self.sets.append(Set(howmuch: sets[0], howlong: sets[1]))
     
         
     }
@@ -73,8 +73,8 @@ extension Workout {
         
     }
     
-    struct Sets: Identifiable, Codable, Hashable, Comparable {
-        static func < (lhs: Workout.Sets, rhs: Workout.Sets) -> Bool {
+    struct Set: Identifiable, Codable, Hashable, Comparable {
+        static func < (lhs: Workout.Set, rhs: Workout.Set) -> Bool {
             lhs.howmuch < rhs.howmuch
         }
         
@@ -98,7 +98,7 @@ extension Workout {
     
 
     struct FormData {
-        var sets: [Sets] = []
+        var sets: [Set] = []
     }
     
     var data: FormData {

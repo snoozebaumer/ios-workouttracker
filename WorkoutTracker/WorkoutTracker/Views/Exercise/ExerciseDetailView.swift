@@ -12,26 +12,15 @@ struct ExerciseDetailView: View {
     @State private var data = Exercise.FormData()
     @State private var isPresentingEditView = false
     @State private var errorInExerciseEditView = false;
-    
-    
-    @Binding var sets: [Workout]
     @State private var isPresentingNewWorkoutView = false;
-    @State private var newSet = Workout.FormData()
-    //@State private var isPresentigWorkoutEditView = false;
-    
-    @State var changedWorkout : Workout = Workout(sets:[4,2])
-    @State var originalWorkout : Workout = Workout(sets:[4,2])
-    
-    
-    
+    @State private var newWorkout = Workout.FormData()
+    @State var sets: [Float] = []
+    @State var changedWorkout : Workout? = nil
+    @State var originalWorkout : Workout? = nil
     @State private var isPresentigSetsEditView = false;
-    @State var selectedSet: Workout? = nil
+    @State var selectedWorkout: Workout? = nil
     @State private var isPresentingConfirmSetDeletionView = false
-    
     @State private var errorInNewWorkoutView = false
-    
-    
-    //same as above to add sets
     
     var body: some View {
         List {
@@ -58,7 +47,7 @@ struct ExerciseDetailView: View {
             
             Section(header: Text("sets")) {
             
-                ForEach($exercise.eSet) { $eset in
+                ForEach($exercise.workouts) { $eset in
                     
                     WorkoutListItemView(set: $eset, lengthUnit: exercise.lengthUnit, sizeUnit: exercise.sizeUnit).onTapGesture{
                         changedWorkout = eset
@@ -66,7 +55,7 @@ struct ExerciseDetailView: View {
                         isPresentigSetsEditView = true
                     }.contextMenu{
                         Button(role: .destructive) {
-                            selectedSet = eset
+                            selectedWorkout = eset
                             isPresentingConfirmSetDeletionView = true
                         } label: {
                             Label("delete-set",systemImage: "trash")
@@ -75,8 +64,8 @@ struct ExerciseDetailView: View {
                     }.alert(NSLocalizedString("deletion-confirmation-set", comment: "Deletion confirmation for Set"), isPresented: $isPresentingConfirmSetDeletionView) {
                         Button("delete-set", role: .destructive) {
                             //To-Do: Implement like deleteexercise once server for set is implemented
-                            let index: Int? = exercise.eSet.firstIndex(where: {eset.id == $0.id})
-                            exercise.eSet.remove(at: index!)
+                            let index: Int? = exercise.workouts.firstIndex(where: {eset.id == $0.id})
+                            exercise.workouts.remove(at: index!)
                             
                             
                         }
@@ -92,21 +81,20 @@ struct ExerciseDetailView: View {
         .navigationTitle(exercise.name)
         
         
-        // Sheet to add sets
         .sheet(isPresented: $isPresentingNewWorkoutView) {
             NavigationView {
-                WorkoutEditView(data: $newSet, hasConnectError: $errorInNewWorkoutView, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
+                WorkoutEditView(data: $newWorkout, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("dismiss") {
                                 isPresentingNewWorkoutView = false
-                                newSet = Workout.FormData()
+                                newWorkout = Workout.FormData()
                                 
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("add") {
-                                var workout = Workout(data: newSet)
+                                var workout = Workout(data: newWorkout)
                                 workout.updateExerciseID(from: exercise.id)
                                 let finalWorkout = workout
                                 //exercise.updateSet(set: finalWorkout)
@@ -115,9 +103,9 @@ struct ExerciseDetailView: View {
                                     if(isSucess) {
                                         isPresentingNewWorkoutView = false
                                         DispatchQueue.main.async {
-                                            exercise.updateSet(set: finalWorkout)
+                                            exercise.updateWorkout(workout: finalWorkout)
                                         }
-                                        newSet = Workout.FormData()
+                                        newWorkout = Workout.FormData()
                                     } else {
                                         errorInNewWorkoutView = true
                                     }
@@ -171,7 +159,7 @@ struct ExerciseDetailView: View {
         
         .sheet(isPresented: $isPresentigSetsEditView) {
             NavigationView {
-                SetsEditView(data: $changedWorkout, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
+                SetsEditView(data: Binding($changedWorkout)!, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("cancel") {
@@ -181,7 +169,7 @@ struct ExerciseDetailView: View {
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("done") {
-                                exercise.changeSet(originalSet: originalWorkout, changedSet: changedWorkout)
+                                exercise.changeWorkout(originalWorkout: originalWorkout!, changedWorkout: changedWorkout!)
                                 isPresentigSetsEditView = false
                                 
                                 
@@ -197,7 +185,7 @@ struct ExerciseDetailView: View {
 struct ExerciseDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ExerciseDetailView(exercise: .constant(ExercisesService.sampleData.exercises[0]), sets: .constant(Workout.sampleData))
+            ExerciseDetailView(exercise: .constant(ExercisesService.sampleData.exercises[0]))
         }
     }
 

@@ -49,7 +49,7 @@ struct SetsEditView: View {
                     withAnimation{
                         let newhm = newHowMuch
                         let newhl = newHowLong
-                        let newset = Workout.Sets(howmuch: newhm, howlong: newhl)
+                        let newset = Workout.Set(howmuch: newhm, howlong: newhl)
                         data.sets.append(newset)
                         
                     }

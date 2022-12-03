@@ -199,7 +199,7 @@ export class DbContext {
     // --- WORKOUTS ---
     async saveWorkout(workout: Workout): Promise<boolean> {
         let isSuccess = false;
-        console.log("Hey")
+      
 
         let sql = `INSERT INTO Workouts
                        (Id, Name, ExerciseId)

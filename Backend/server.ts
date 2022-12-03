@@ -30,6 +30,7 @@ APP.post("/exercise/", (req: Request, res: Response): void => {
 
 APP.put("/exercise/:id", (req: Request, res: Response): void => {
     let exercise: Exercise = JSON.parse(req.body.exercise);
+    console.log(req.body.exercise)
     db.update(exercise).then((success) => {
         if (success) {
             res.status(200).json({
@@ -58,6 +59,7 @@ APP.delete("/exercise/:id", (req: Request, res: Response): void => {
 
 APP.get("/exercises/", (req: Request, res: Response): void => {
     db.get().then((exercises) => {
+        console.log(exercises)
         res.status(200).json(exercises);
     }).catch(() => {
         res.status(500).json({
@@ -68,7 +70,7 @@ APP.get("/exercises/", (req: Request, res: Response): void => {
 
 //Workout
 APP.post("/workout/", (req: Request, res: Response): void => {
-    console.log("Hey")
+  
     let workout: Workout = JSON.parse(req.body.workout);
     
     
