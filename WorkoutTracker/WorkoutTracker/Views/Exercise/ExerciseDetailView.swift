@@ -13,11 +13,11 @@ struct ExerciseDetailView: View {
     @State private var isPresentingEditView = false
     @State private var errorInExerciseEditView = false;
     @State private var isPresentingNewWorkoutView = false;
-    @State private var newWorkout = Workout.FormData()
+    @State private var newWorkoutData = Workout.FormData()
+    @State private var changeWorkoutId: UUID? = nil
+    @State private var changeWorkoutData = Workout.FormData()
     @State var sets: [Float] = []
-    @State var changedWorkout : Workout? = nil
-    @State var originalWorkout : Workout? = nil
-    @State private var isPresentigSetsEditView = false;
+    @State private var isPresentingWorkoutEditView = false;
     @State var selectedWorkout: Workout? = nil
     @State private var isPresentingConfirmSetDeletionView = false
     @State private var errorInNewWorkoutView = false
@@ -26,7 +26,7 @@ struct ExerciseDetailView: View {
         List {
             Section(header: Text("exercise-details")) {
                 HStack {
-                    Label("category", systemImage: "figure.arms.open")
+                    Label("category", systemImage: "dumbbell.fill")
                     Spacer()
                     Text(exercise.category.name)
                 }
@@ -41,60 +41,48 @@ struct ExerciseDetailView: View {
                     Text(NSLocalizedString(exercise.lengthUnit.localizableKey, comment: "Localization of LengthUnit"))
                 }
             }
-            Button("new-set") {
+            Button("new-workout") {
                 isPresentingNewWorkoutView = true
             }
-            
-            Section(header: Text("sets")) {
-            
-                ForEach($exercise.workouts) { $eset in
-                    
-                    WorkoutListItemView(set: $eset, lengthUnit: exercise.lengthUnit, sizeUnit: exercise.sizeUnit).onTapGesture{
-                        changedWorkout = eset
-                        originalWorkout = changedWorkout
-                        isPresentigSetsEditView = true
+            Section(header: Text("workouts")) {
+                ForEach($exercise.workouts) { $workout in
+                    WorkoutListItemView(workout: $workout, lengthUnit: exercise.lengthUnit, sizeUnit: exercise.sizeUnit).onTapGesture{
+                        changeWorkoutData.sets = workout.sets
+                        changeWorkoutId = workout.id
+                        isPresentingWorkoutEditView = true
                     }.contextMenu{
                         Button(role: .destructive) {
-                            selectedWorkout = eset
+                            selectedWorkout = workout
                             isPresentingConfirmSetDeletionView = true
                         } label: {
-                            Label("delete-set",systemImage: "trash")
+                            Label("delete-workout",systemImage: "trash")
                             
                         }
-                    }.alert(NSLocalizedString("deletion-confirmation-set", comment: "Deletion confirmation for Set"), isPresented: $isPresentingConfirmSetDeletionView) {
-                        Button("delete-set", role: .destructive) {
+                    }.alert(NSLocalizedString("deletion-confirmation-workout", comment: "Deletion confirmation for Workout"), isPresented: $isPresentingConfirmSetDeletionView) {
+                        Button("delete-workout", role: .destructive) {
                             //To-Do: Implement like deleteexercise once server for set is implemented
-                            let index: Int? = exercise.workouts.firstIndex(where: {eset.id == $0.id})
+                            let index: Int? = exercise.workouts.firstIndex(where: {workout.id == $0.id})
                             exercise.workouts.remove(at: index!)
-                            
-                            
                         }
                     }
                 }
-                
             }
-            
-            
-            
-            
         }
         .navigationTitle(exercise.name)
-        
-        
         .sheet(isPresented: $isPresentingNewWorkoutView) {
             NavigationView {
-                WorkoutEditView(data: $newWorkout, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
+                WorkoutEditView(data: $newWorkoutData, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("dismiss") {
                                 isPresentingNewWorkoutView = false
-                                newWorkout = Workout.FormData()
+                                newWorkoutData = Workout.FormData()
                                 
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("add") {
-                                var workout = Workout(data: newWorkout)
+                                var workout = Workout(data: newWorkoutData)
                                 workout.updateExerciseID(from: exercise.id)
                                 let finalWorkout = workout
                                 //exercise.updateSet(set: finalWorkout)
@@ -103,9 +91,9 @@ struct ExerciseDetailView: View {
                                     if(isSucess) {
                                         isPresentingNewWorkoutView = false
                                         DispatchQueue.main.async {
-                                            exercise.updateWorkout(workout: finalWorkout)
+                                            exercise.addWorkout(workout: finalWorkout)
                                         }
-                                        newWorkout = Workout.FormData()
+                                        newWorkoutData = Workout.FormData()
                                     } else {
                                         errorInNewWorkoutView = true
                                     }
@@ -121,8 +109,6 @@ struct ExerciseDetailView: View {
                     }
             }
         }
-        
-        
         .sheet(isPresented: $isPresentingEditView) {
             NavigationView {
                 ExerciseEditView(data: $data, hasConnectionError: $errorInExerciseEditView)
@@ -156,27 +142,23 @@ struct ExerciseDetailView: View {
                 data = exercise.data
             }
         }
-        
-        .sheet(isPresented: $isPresentigSetsEditView) {
+        .sheet(isPresented: $isPresentingWorkoutEditView) {
             NavigationView {
-                SetsEditView(data: Binding($changedWorkout)!, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
+                WorkoutEditView(data: $changeWorkoutData, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("cancel") {
-                                isPresentigSetsEditView = false
-                                
+                                isPresentingWorkoutEditView = false
                             }
                         }
                         ToolbarItem(placement: .confirmationAction) {
                             Button("done") {
-                                exercise.changeWorkout(originalWorkout: originalWorkout!, changedWorkout: changedWorkout!)
-                                isPresentigSetsEditView = false
-                                
-                                
+                                exercise.changeWorkout(id: changeWorkoutId!, data: changeWorkoutData)
+                                changeWorkoutId = nil
+                                isPresentingWorkoutEditView = false
                             }
                         }
                     }
-                
             }
         }
     }

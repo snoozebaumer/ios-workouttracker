@@ -12,12 +12,12 @@ struct Workout: Equatable, Identifiable, Codable {
     let id: UUID
     var name: String
     var exerciseID: UUID
-    var sets : [Set]
+    var sets : [Set] = []
 
    
  
     
-    init(id: UUID = UUID(), sets: [Float]) {
+    init(id: UUID = UUID(), sets: [Float] = []) {
         self.id = id
         func convertDateFormatter(date: Date) -> String {
              let date = Date()
@@ -27,29 +27,9 @@ struct Workout: Equatable, Identifiable, Codable {
              return result
            }
         self.name = convertDateFormatter(date: Date.now)
-        //self.excercise = excercise
-       /* self.strength = strenght
-        self.metric = metric
-        if(strenght){
-            //display as 5 * x{metric}
-            if(!metric&&strenght){
-                //display as 5 * x{imperial}
-            }
-        }
-        else{
-            //display as 5km / x{min}
-            if(!metric){
-                //diplay as 5mi / x{min}
-            }
-        }*/
         self.exerciseID = UUID()
-        self.sets = []
         self.sets.append(Set(howmuch: sets[0], howlong: sets[1]))
-    
-        
     }
-    
-    
 }
 
 
@@ -66,11 +46,6 @@ extension Workout {
            }
         self.name = convertDateFormatter(date: Date.now)
         self.sets = data.sets
-        // TBD 
-        //self.strength = true
-        //self.metric = true
-        //self.excercise = ""
-        
     }
     
     struct Set: Identifiable, Codable, Hashable, Comparable {
@@ -86,7 +61,6 @@ extension Workout {
             self.id = id
             self.howmuch = howmuch
             self.howlong = howlong
-            
         }
         
         
@@ -108,20 +82,14 @@ extension Workout {
     mutating func updateExerciseID(from data: UUID) {
         self.exerciseID = data
     }
-    
-    
 }
 
 
 
 extension Workout {
     static let sampleData: [Workout] = [
-    
         Workout(sets:[4,2])
-        
         ]
-    
-    
 }
     
 

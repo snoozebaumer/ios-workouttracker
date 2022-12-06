@@ -17,7 +17,6 @@ struct ExerciseListItemView: View {
                 .font(.headline)
             Spacer()
             HStack {
-                //TODO: replace with set data
                 Text(getStrongestSetString()).font(.title)
                 Text(hasSetData ? exercise.sizeUnit.short : "")
             }

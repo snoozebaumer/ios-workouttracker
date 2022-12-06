@@ -7,11 +7,11 @@
 "exercises" = "Exercises";
 "dismiss" = "Dismiss";
 "delete-exercise" = "Delete Exercise";
-"delete-set" = "Delete Set";
+"delete-workout" = "Delete Workout";
 "deletion-confirmation" = "Are you sure you want to delete exercise \"%@\"?";
-"deletion-confirmation-set" = "Are you sure you want to delete this set";
-"new-set" = "New Set";
-"sets" = "Sets";
+"deletion-confirmation-workout" = "Are you sure you want to delete this workout?";
+"new-workout" = "New Workout";
+"workouts" = "Workouts";
 "cancel" = "Cancel";
 "done" = "Done";
 "edit" = "Edit";

@@ -47,14 +47,16 @@ struct Exercise: Identifiable, Codable {
     }
     
 
-    mutating func updateWorkout(workout: Workout){
+    mutating func addWorkout(workout: Workout){
         workouts.append(workout)
     }
     
-    mutating func changeWorkout(originalWorkout: Workout, changedWorkout: Workout){
-        if let index = workouts.firstIndex(of: originalWorkout) {
+    mutating func changeWorkout(id: UUID, data: Workout.FormData){
+        if let index = workouts.firstIndex(where: {$0.id == id}) {
+            var workout = workouts[index]
             workouts.remove(at: index)
-            workouts.insert(changedWorkout, at: index)
+            workout.sets = data.sets
+            workouts.insert(workout, at: index)
         }
     }
     

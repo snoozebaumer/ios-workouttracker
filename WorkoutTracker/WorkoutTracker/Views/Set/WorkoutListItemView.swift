@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct WorkoutListItemView: View {
-    @Binding var set: Workout
+    @Binding var workout: Workout
     let lengthUnit: LengthUnit
     let sizeUnit: SizeUnit
     
     var body: some View {
         VStack{
-                 Text(set.name)
+                 Text(workout.name)
                 .font(.headline)
                  VStack {
-                     ForEach(set.sets) {s in
+                     ForEach(workout.sets) {s in
                          HStack{
                              Text(String(format: "%.1f", s.howmuch) + " " + sizeUnit.short)
                          Text(" x ")
@@ -45,6 +45,6 @@ struct WorkoutListItemView: View {
 
 struct SetListItemView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutListItemView(set: .constant(Workout.sampleData[0]), lengthUnit: .reps, sizeUnit: .kg)
+        WorkoutListItemView(workout: .constant(Workout.sampleData[0]), lengthUnit: .reps, sizeUnit: .kg)
     }
 }

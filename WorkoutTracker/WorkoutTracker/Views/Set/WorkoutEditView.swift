@@ -10,8 +10,6 @@ import AlertToast
 
 
 struct WorkoutEditView: View {
-    //@Binding var data = Set.Data()
-    //@State private var d
     @Binding var data: Workout.FormData
     @State var newHowMuch : Float = 0
     @State var newHowLong : Float = 0
@@ -60,15 +58,11 @@ struct WorkoutEditView: View {
                                                         if let index = data.sets.firstIndex(of: set) {
                                                             data.sets.remove(at: index)
                                                         }
-                                
-                                                        
-                                                    })
+                            })
                                                     {
                                                         Image(systemName: "minus.circle.fill")
                                                     }.buttonStyle(BorderedButtonStyle())
                         }
-                       
-
                     }
                 }
             }

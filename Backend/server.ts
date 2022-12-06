@@ -59,7 +59,6 @@ APP.delete("/exercise/:id", (req: Request, res: Response): void => {
 
 APP.get("/exercises/", (req: Request, res: Response): void => {
     db.get().then((exercises) => {
-        console.log(exercises)
         res.status(200).json(exercises);
     }).catch(() => {
         res.status(500).json({
@@ -70,10 +69,7 @@ APP.get("/exercises/", (req: Request, res: Response): void => {
 
 //Workout
 APP.post("/workout/", (req: Request, res: Response): void => {
-  
     let workout: Workout = JSON.parse(req.body.workout);
-    
-    
     db.saveWorkout(workout).then((success) => {
         if (success) {
             res.status(200).json({

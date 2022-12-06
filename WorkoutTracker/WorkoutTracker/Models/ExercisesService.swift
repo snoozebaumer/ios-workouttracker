@@ -114,10 +114,10 @@ extension ExercisesService {
     }
     private static let sampleCategories = [Category(name: "Pecs"), Category(name: "Back"), Category(name: "Lats"), Category(name: "Cardio")]
     private static let sampleExercises = [
-        Exercise(title: "Bench Press", category: sampleCategories[0]),
-        Exercise(title: "Deadlift", category: sampleCategories[1]),
-        Exercise(title: "Pull Up", category: sampleCategories[2]),
-        Exercise(title: "Running", category: sampleCategories[3])
+        Exercise(title: "Bench Press", category: sampleCategories[0], workouts: [Workout(sets: [60, 4])]),
+        Exercise(title: "Deadlift", category: sampleCategories[1], sizeUnit: .lb, workouts: [Workout(sets: [200, 6])]),
+        Exercise(title: "Pull Up", category: sampleCategories[2], workouts: [Workout(sets: [75, 12])]),
+        Exercise(title: "Running", category: sampleCategories[3], sizeUnit: .km, lengthUnit: .min, workouts: [Workout(sets: [20, 160])])
     ]
     static let sampleData = ExercisesService(exercises: sampleExercises)
 }

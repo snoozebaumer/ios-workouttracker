@@ -24,7 +24,6 @@
 		19DDF2492939367F00E9F518 /* LengthUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19DDF2482939367F00E9F518 /* LengthUnit.swift */; };
 		19E119DF292A8FC4002A43E8 /* Workout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 19E119DE292A8FC4002A43E8 /* Workout.swift */; };
 		2E43445D29311555000CCF27 /* WorkoutListItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E43445C29311555000CCF27 /* WorkoutListItemView.swift */; };
-		2E6F3AD92936601700E0A59E /* SetsEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E6F3AD82936601700E0A59E /* SetsEditView.swift */; };
 		2ED4AD84293A4770004FB4AF /* WorkoutsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2ED4AD83293A4770004FB4AF /* WorkoutsService.swift */; };
 /* End PBXBuildFile section */
 
@@ -47,7 +46,6 @@
 		19DDF2482939367F00E9F518 /* LengthUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LengthUnit.swift; sourceTree = "<group>"; };
 		19E119DE292A8FC4002A43E8 /* Workout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workout.swift; sourceTree = "<group>"; };
 		2E43445C29311555000CCF27 /* WorkoutListItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutListItemView.swift; sourceTree = "<group>"; };
-		2E6F3AD82936601700E0A59E /* SetsEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetsEditView.swift; sourceTree = "<group>"; };
 		2ED4AD83293A4770004FB4AF /* WorkoutsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutsService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -128,7 +126,6 @@
 			children = (
 				19943FFA292A90860044C487 /* WorkoutEditView.swift */,
 				2E43445C29311555000CCF27 /* WorkoutListItemView.swift */,
-				2E6F3AD82936601700E0A59E /* SetsEditView.swift */,
 			);
 			path = Set;
 			sourceTree = "<group>";
@@ -235,7 +232,6 @@
 				196157F42923DE510021D7D1 /* ExerciseEditView.swift in Sources */,
 				19C72495292C0F9400C86947 /* ExercisesService.swift in Sources */,
 				196157EA2923C8230021D7D1 /* Category.swift in Sources */,
-				2E6F3AD92936601700E0A59E /* SetsEditView.swift in Sources */,
 				2ED4AD84293A4770004FB4AF /* WorkoutsService.swift in Sources */,
 				196157E72923C7190021D7D1 /* Exercise.swift in Sources */,
 				19943FFB292A90860044C487 /* WorkoutEditView.swift in Sources */,
