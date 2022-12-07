@@ -28,3 +28,7 @@
 "minutes" = "Minutes";
 "seconds" = "Seconds";
 "metres" = "Metre";
+"show-random-exercise" = "Randomly select exercise";
+"apply-filter" = "Apply filter";
+"clear-filter" = "Remove filter";
+"none" = "None";

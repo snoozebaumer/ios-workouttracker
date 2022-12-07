@@ -10,17 +10,24 @@ import SwiftUI
 struct ExercisesView: View {
     @Binding var exercises: [Exercise]
     @State var isPresentingNewExerciseView = false;
-    @State private var newExercise = Exercise.FormData()
-    @State private var errorInExerciseEditView = false
-    @State private var isPresentingConfirmDeletionView = false
+    @State var isPresentingConfirmDeletionView = false
+    @State var isPresentingFilterView = false
+    
+    @State var newExercise = Exercise.FormData()
+    @State var errorInExerciseEditView = false
+    
     @State var selectedExercise: Exercise? = nil
+    @State var isFilterActive: Bool = false
+    @State var newFilter: Category? = nil
+    @State var filteredExercises: [Exercise] = []
+    var filter: Category? = nil
   
     
     
     
     var body: some View {
         List {
-            ForEach($exercises) { $exercise in
+            ForEach(!isFilterActive ? $exercises : $filteredExercises) { $exercise in
                 NavigationLink(destination: ExerciseDetailView(exercise: $exercise)) {
                     ExerciseListItemView(exercise: exercise)
                 }.contextMenu {
@@ -54,12 +61,12 @@ struct ExercisesView: View {
         }
         .navigationTitle("exercises")
         .toolbar {
-            //plus button did not show without this placement
             ToolbarItemGroup(placement: .navigationBarTrailing){
                 Button(action: {
-                    // TODO: filter
+                    isPresentingFilterView = true
                 }) {
                     Image(systemName: "line.3.horizontal.decrease.circle")
+                        .foregroundColor(filter != nil ? .green : .accentColor)
                 }
                 Button(action: {
                             isPresentingNewExerciseView = true
@@ -97,6 +104,35 @@ struct ExercisesView: View {
                                     
                                                         }                       }
                                                 }
+                    }
+            }
+        }
+        .sheet(isPresented: $isPresentingFilterView) {
+            NavigationView {
+                FilterView(filter: $newFilter)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button(NSLocalizedString("dismiss", comment: "Dismiss Button")) {
+                                isPresentingFilterView = false
+                                                           }
+                        }
+                        ToolbarItemGroup(placement: .confirmationAction) {
+                            Button {
+                                
+                            } label: {
+                                Label("apply-filter", systemImage: "line.3.horizontal.decrease")
+                            }
+                            Button {
+                                
+                            } label: {
+                                Label("show-random-exercise", systemImage: "shuffle")
+                            }
+                        }
+                        ToolbarItem(placement: .bottomBar) {
+                            Button("clear-filter") {
+                                
+                            }
+                        }
                     }
             }
         }

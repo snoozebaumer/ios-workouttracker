@@ -29,3 +29,7 @@
 "seconds" = "Sekunden";
 "kilometres" = "Kilometer";
 "metres" = "Meter";
+"show-random-exercise" = "Zufällige Übung auswählen";
+"apply-filter" = "Filter anwenden";
+"clear-filter" = "Filter entfernen";
+"none" = "Kein Filter";
