@@ -13,7 +13,7 @@ enum SizeUnit: Int, Codable, Equatable, CaseIterable {
     case km = 2
     case mi = 3
     case m = 4
-    
+
     var localizableKey: String {
         switch self {
         case .kg: return "kilograms"
@@ -23,7 +23,7 @@ enum SizeUnit: Int, Codable, Equatable, CaseIterable {
         case .m: return "metres"
         }
     }
-    
+
     var short: String {
         switch self {
         case .kg: return "kg"

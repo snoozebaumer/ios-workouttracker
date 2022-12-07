@@ -9,7 +9,7 @@ import SwiftUI
 
 struct FilterView: View {
     @Binding var filter: Category?
- 
+
     var body: some View {
         Form {
             Section("Filter") {

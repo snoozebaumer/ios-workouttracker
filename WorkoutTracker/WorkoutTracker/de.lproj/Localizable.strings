@@ -32,4 +32,6 @@
 "show-random-exercise" = "Zufällige Übung auswählen";
 "apply-filter" = "Filter anwenden";
 "clear-filter" = "Filter entfernen";
+"no-filter-active" = "Kein Filter ausgewählt";
+"no-filter-active-subtext" = "Bitte wählen Sie einen Filter aus, um weiterzufahren.";
 "none" = "Kein Filter";

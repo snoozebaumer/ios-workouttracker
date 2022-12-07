@@ -10,20 +10,21 @@ import SwiftUI
 struct ExerciseListItemView: View {
     let exercise: Exercise
     @State var hasSetData: Bool = false
-    
+
     var body: some View {
         HStack(alignment: .center) {
             Text(exercise.name)
-                .font(.headline)
+                    .font(.headline)
             Spacer()
             HStack {
                 Text(getStrongestSetString()).font(.title)
                 Text(hasSetData ? exercise.sizeUnit.short : "")
             }
-            
-        }.padding()
+
+        }
+                .padding()
     }
-    
+
     func getStrongestSetString() -> String {
         let strongestSetString = exercise.getStrongestSetString()
         DispatchQueue.main.async {

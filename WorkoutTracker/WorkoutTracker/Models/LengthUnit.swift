@@ -7,13 +7,13 @@
 
 import Foundation
 
-enum LengthUnit: Int, Codable,Equatable, CaseIterable {
+enum LengthUnit: Int, Codable, Equatable, CaseIterable {
     case reps = 0
     case min = 1
     case sec = 2
     case km = 3
     case m = 4
-    
+
     var localizableKey: String {
         switch self {
         case .reps: return "reps"
@@ -23,7 +23,7 @@ enum LengthUnit: Int, Codable,Equatable, CaseIterable {
         case .m: return "metres"
         }
     }
-    
+
     var short: String {
         switch self {
         case .reps: return "reps"

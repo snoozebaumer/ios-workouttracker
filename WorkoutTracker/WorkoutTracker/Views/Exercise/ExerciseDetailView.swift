@@ -21,7 +21,7 @@ struct ExerciseDetailView: View {
     @State var selectedWorkout: Workout? = nil
     @State private var isPresentingConfirmSetDeletionView = false
     @State private var errorInNewWorkoutView = false
-    
+
     var body: some View {
         List {
             Section(header: Text("exercise-details")) {
@@ -46,121 +46,123 @@ struct ExerciseDetailView: View {
             }
             Section(header: Text("workouts")) {
                 ForEach($exercise.workouts) { $workout in
-                    WorkoutListItemView(workout: $workout, lengthUnit: exercise.lengthUnit, sizeUnit: exercise.sizeUnit).onTapGesture{
-                        changeWorkoutData.sets = workout.sets
-                        changeWorkoutId = workout.id
-                        isPresentingWorkoutEditView = true
-                    }.contextMenu{
-                        Button(role: .destructive) {
-                            selectedWorkout = workout
-                            isPresentingConfirmSetDeletionView = true
-                        } label: {
-                            Label("delete-workout",systemImage: "trash")
-                            
-                        }
-                    }.alert(NSLocalizedString("deletion-confirmation-workout", comment: "Deletion confirmation for Workout"), isPresented: $isPresentingConfirmSetDeletionView) {
-                        Button("delete-workout", role: .destructive) {
-                            //To-Do: Implement like deleteexercise once server for set is implemented
-                            let index: Int? = exercise.workouts.firstIndex(where: {workout.id == $0.id})
-                            exercise.workouts.remove(at: index!)
-                        }
-                    }
+                    WorkoutListItemView(workout: $workout, lengthUnit: exercise.lengthUnit, sizeUnit: exercise.sizeUnit).onTapGesture {
+                                changeWorkoutData.sets = workout.sets
+                                changeWorkoutId = workout.id
+                                isPresentingWorkoutEditView = true
+                            }
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    selectedWorkout = workout
+                                    isPresentingConfirmSetDeletionView = true
+                                } label: {
+                                    Label("delete-workout", systemImage: "trash")
+
+                                }
+                            }
+                            .alert(NSLocalizedString("deletion-confirmation-workout", comment: "Deletion confirmation for Workout"), isPresented: $isPresentingConfirmSetDeletionView) {
+                                Button("delete-workout", role: .destructive) {
+                                    //To-Do: Implement like deleteexercise once server for set is implemented
+                                    let index: Int? = exercise.workouts.firstIndex(where: { workout.id == $0.id })
+                                    exercise.workouts.remove(at: index!)
+                                }
+                            }
                 }
             }
         }
-        .navigationTitle(exercise.name)
-        .sheet(isPresented: $isPresentingNewWorkoutView) {
-            NavigationView {
-                WorkoutEditView(data: $newWorkoutData, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("dismiss") {
-                                isPresentingNewWorkoutView = false
-                                newWorkoutData = Workout.FormData()
-                                
-                            }
-                        }
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("add") {
-                                var workout = Workout(data: newWorkoutData)
-                                workout.updateExerciseID(from: exercise.id)
-                                let finalWorkout = workout
-                                //exercise.updateSet(set: finalWorkout)
-                                //send Workout to server
-                                WorkoutsService.save(workout: finalWorkout) { isSucess in
-                                    if(isSucess) {
-                                        isPresentingNewWorkoutView = false
-                                        DispatchQueue.main.async {
-                                            exercise.addWorkout(workout: finalWorkout)
+                .navigationTitle(exercise.name)
+                .sheet(isPresented: $isPresentingNewWorkoutView) {
+                    NavigationView {
+                        WorkoutEditView(data: $newWorkoutData, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
+                                .toolbar {
+                                    ToolbarItem(placement: .cancellationAction) {
+                                        Button("dismiss") {
+                                            isPresentingNewWorkoutView = false
+                                            newWorkoutData = Workout.FormData()
+
                                         }
-                                        newWorkoutData = Workout.FormData()
-                                    } else {
-                                        errorInNewWorkoutView = true
                                     }
-                                
-                                    
+                                    ToolbarItem(placement: .confirmationAction) {
+                                        Button("add") {
+                                            var workout = Workout(data: newWorkoutData)
+                                            workout.updateExerciseID(from: exercise.id)
+                                            let finalWorkout = workout
+                                            //exercise.updateSet(set: finalWorkout)
+                                            //send Workout to server
+                                            WorkoutsService.save(workout: finalWorkout) { isSucess in
+                                                if (isSucess) {
+                                                    isPresentingNewWorkoutView = false
+                                                    DispatchQueue.main.async {
+                                                        exercise.addWorkout(workout: finalWorkout)
+                                                    }
+                                                    newWorkoutData = Workout.FormData()
+                                                } else {
+                                                    errorInNewWorkoutView = true
+                                                }
+
+
+                                            }
+                                            //newSet = Workout.FormData()
+                                            //isPresentingNewWorkoutView = false
+
+
+                                        }
+                                    }
                                 }
-                                //newSet = Workout.FormData()
-                                //isPresentingNewWorkoutView = false
-                                
-                                
-                            }
-                        }
                     }
-            }
-        }
-        .sheet(isPresented: $isPresentingEditView) {
-            NavigationView {
-                ExerciseEditView(data: $data, hasConnectionError: $errorInExerciseEditView)
-                    .navigationTitle(exercise.name)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("cancel") {
-                                isPresentingEditView = false
-                            }
-                        }
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("done") {
-                                Task {
-                                    await exercise.update(from: data) {
-                                        isSuccess in
-                                        if (isSuccess) {
+                }
+                .sheet(isPresented: $isPresentingEditView) {
+                    NavigationView {
+                        ExerciseEditView(data: $data, hasConnectionError: $errorInExerciseEditView)
+                                .navigationTitle(exercise.name)
+                                .toolbar {
+                                    ToolbarItem(placement: .cancellationAction) {
+                                        Button("cancel") {
                                             isPresentingEditView = false
-                                        } else {
-                                            errorInExerciseEditView = true
+                                        }
+                                    }
+                                    ToolbarItem(placement: .confirmationAction) {
+                                        Button("done") {
+                                            Task {
+                                                await exercise.update(from: data) {
+                                                    isSuccess in
+                                                    if (isSuccess) {
+                                                        isPresentingEditView = false
+                                                    } else {
+                                                        errorInExerciseEditView = true
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
-                            }
-                        }
                     }
-            }
-        }
-        .toolbar {
-            Button("edit") {
-                isPresentingEditView = true
-                data = exercise.data
-            }
-        }
-        .sheet(isPresented: $isPresentingWorkoutEditView) {
-            NavigationView {
-                WorkoutEditView(data: $changeWorkoutData, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
-                    .toolbar {
-                        ToolbarItem(placement: .cancellationAction) {
-                            Button("cancel") {
-                                isPresentingWorkoutEditView = false
-                            }
-                        }
-                        ToolbarItem(placement: .confirmationAction) {
-                            Button("done") {
-                                exercise.changeWorkout(id: changeWorkoutId!, data: changeWorkoutData)
-                                changeWorkoutId = nil
-                                isPresentingWorkoutEditView = false
-                            }
-                        }
+                }
+                .toolbar {
+                    Button("edit") {
+                        isPresentingEditView = true
+                        data = exercise.data
                     }
-            }
-        }
+                }
+                .sheet(isPresented: $isPresentingWorkoutEditView) {
+                    NavigationView {
+                        WorkoutEditView(data: $changeWorkoutData, sizeUnit: exercise.sizeUnit, lengthUnit: exercise.lengthUnit)
+                                .toolbar {
+                                    ToolbarItem(placement: .cancellationAction) {
+                                        Button("cancel") {
+                                            isPresentingWorkoutEditView = false
+                                        }
+                                    }
+                                    ToolbarItem(placement: .confirmationAction) {
+                                        Button("done") {
+                                            exercise.changeWorkout(id: changeWorkoutId!, data: changeWorkoutData)
+                                            changeWorkoutId = nil
+                                            isPresentingWorkoutEditView = false
+                                        }
+                                    }
+                                }
+                    }
+                }
     }
 }
 

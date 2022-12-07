@@ -31,4 +31,6 @@
 "show-random-exercise" = "Randomly select exercise";
 "apply-filter" = "Apply filter";
 "clear-filter" = "Remove filter";
+"no-filter-active" = "No Filter selected";
+"no-filter-active-subtext" = "Please select filter before using feature.";
 "none" = "None";
