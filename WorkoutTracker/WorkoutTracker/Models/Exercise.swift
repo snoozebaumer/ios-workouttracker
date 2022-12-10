@@ -59,6 +59,11 @@ struct Exercise: Identifiable, Codable {
             workouts.insert(workout, at: index)
         }
     }
+    
+    mutating func updateWorkout(completion: @escaping (_ isSuccess: Bool) -> ()) async {
+        let isSuccess = await fetchUpdateSuccess(savingExercise: self, id: self.id)
+        completion(isSuccess)
+    }
 
 
 }

@@ -87,24 +87,20 @@ struct ExerciseDetailView: View {
                                             var workout = Workout(data: newWorkoutData)
                                             workout.updateExerciseID(from: exercise.id)
                                             let finalWorkout = workout
-                                            //exercise.updateSet(set: finalWorkout)
-                                            //send Workout to server
-                                            WorkoutsService.save(workout: finalWorkout) { isSucess in
-                                                if (isSucess) {
-                                                    isPresentingNewWorkoutView = false
-                                                    DispatchQueue.main.async {
-                                                        exercise.addWorkout(workout: finalWorkout)
+                                       
+                                            exercise.addWorkout(workout: finalWorkout)
+                                            Task {
+                                                await exercise.updateWorkout() {
+                                                    isSuccess in
+                                                    if (isSuccess) {
+                                                        isPresentingNewWorkoutView = false
+                                                    } else {
+                                                        errorInNewWorkoutView = true
                                                     }
-                                                    newWorkoutData = Workout.FormData()
-                                                } else {
-                                                    errorInNewWorkoutView = true
                                                 }
-
-
                                             }
-                                            //newSet = Workout.FormData()
-                                            //isPresentingNewWorkoutView = false
-
+                                            newWorkoutData = Workout.FormData()
+                                   
 
                                         }
                                     }
