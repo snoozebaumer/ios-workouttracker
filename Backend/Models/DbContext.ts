@@ -35,6 +35,7 @@ export class DbContext {
        // TODO: getWorkouts to be implemented, also get them in reverse order, so last workout is first
        //get all workouts with foreign key=excercise.id and add them
         let exercisesDb = await this.getExercises();
+        let workoutsDb = await this.getWorkouts();
         this.exercises = exercisesDb.map((value) => {
             let category = this.categories.find(c => c.id == value.CategoryId);
             if (!category) {
@@ -42,7 +43,17 @@ export class DbContext {
             }
             return new Exercise(value.Id, value.Name, category, value.SizeUnit, value.LengthUnit);
         });
+        
+      
+            
+            
+            
+            
 
+            
+        
+        
+        
         return this.exercises;
     }
 
@@ -209,6 +220,24 @@ export class DbContext {
                 });
         });
     }
+
+    private async getWorkouts(): Promise<Array<{Id: string, Name: string, ExerciseId: String
+                                               }>> {
+        return new Promise<Array<{Id: string, Name: string, ExerciseId: String
+            }>>((resolve, reject) => {
+            this.connection.query(`SELECT * FROM Workouts`,
+                (err: any, data: Array<{
+                    Id: string, Name: string, ExerciseId: String
+                }>) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data);
+                    }
+                });
+        });
+    }
+
 
 
 
