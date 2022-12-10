@@ -77,6 +77,22 @@ export class DbContext {
             return isSuccess;
         }
 
+        let workoutSql = 'INSERT INTO Workouts (Id, Name, ExerciseID) VALUES(?, ?, ?)'
+        for (var w of exercise.workouts){
+            let ww: Workout = w
+            if((this.workouts.findIndex((value) => value.id == ww.id)==-1)){
+                this.workouts.push(ww)
+                try{
+                    await this.executeInDb(workoutSql, [ww.id, ww.name,
+                        ww.exerciseID]);
+                }
+                catch (e) {
+                    console.log(e);
+                    
+                }
+            }
+        }
+
         let sql = `UPDATE Exercises
                       SET Name=?, CategoryId=?, SizeUnit=?, LengthUnit=?
                       WHERE Id=?;`

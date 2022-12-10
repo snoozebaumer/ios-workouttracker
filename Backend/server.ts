@@ -29,8 +29,8 @@ APP.post("/exercise/", (req: Request, res: Response): void => {
 });
 
 APP.put("/exercise/:id", (req: Request, res: Response): void => {
+    console.log(req)
     let exercise: Exercise = JSON.parse(req.body.exercise);
-    console.log(req.body.exercise)
     db.update(exercise).then((success) => {
         if (success) {
             res.status(200).json({
@@ -46,6 +46,7 @@ APP.put("/exercise/:id", (req: Request, res: Response): void => {
 
 APP.delete("/exercise/:id", (req: Request, res: Response): void => {
     let id: string = req.params.id;
+    console.log(id)
     db.delete(id).then((categoryIncluded) => {
         res.status(200).json({
             categoryIncluded: categoryIncluded
