@@ -32,7 +32,7 @@ export class DbContext {
         }
 
         this.categories = await this.getCategories();
-       //getWorkouts to be implemented
+       // TODO: getWorkouts to be implemented, also get them in reverse order, so last workout is first
        //get all workouts with foreign key=excercise.id and add them
         let exercisesDb = await this.getExercises();
         this.exercises = exercisesDb.map((value) => {

@@ -48,7 +48,7 @@ struct Exercise: Identifiable, Codable {
 
 
     mutating func addWorkout(workout: Workout) {
-        workouts.append(workout)
+        workouts.insert(workout, at: 0)
     }
 
     mutating func changeWorkout(id: UUID, data: Workout.FormData) {
