@@ -68,22 +68,6 @@ APP.get("/exercises/", (req: Request, res: Response): void => {
     });
 });
 
-//Workout
-APP.post("/workout/", (req: Request, res: Response): void => {
-    let workout: Workout = JSON.parse(req.body.workout);
-    db.saveWorkout(workout).then((success) => {
-        if (success) {
-            res.status(200).json({
-                message: "Saved successfully!"
-            });
-        } else {
-            res.status(500).json({
-                message: "An error occurred while saving changes. Please try again later."
-            });
-        }
-    });
-});
-
 
 APP.listen(PORT, (): void => {
     console.log(`Server Running here -> http://localhost:${PORT}`);

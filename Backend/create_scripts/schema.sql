@@ -31,7 +31,7 @@ CREATE TABLE `WorkoutTracker`.`Exercises` (
                                               CONSTRAINT `FK_Exercise`
                                                   FOREIGN KEY (`ExerciseId`)
                                                       REFERENCES `WorkoutTracker`.`Exercises` (`Id`)
-                                                      ON DELETE NO ACTION
+                                                      ON DELETE cascade
                                                       ON UPDATE NO ACTION);
 
  CREATE TABLE `WorkoutTracker`.`Sets` (
@@ -44,7 +44,7 @@ CREATE TABLE `WorkoutTracker`.`Exercises` (
                                               CONSTRAINT `FK_Workout`
                                                   FOREIGN KEY (`WorkoutID`)
                                                       REFERENCES `WorkoutTracker`.`Workouts` (`Id`)
-                                                      ON DELETE NO ACTION
+                                                      ON DELETE cascade
                                                       ON UPDATE NO ACTION);                                        
 
 

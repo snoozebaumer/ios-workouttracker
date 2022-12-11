@@ -249,28 +249,4 @@ export class DbContext {
     }
 
 
-
-
-    // --- WORKOUTS ---
-    async saveWorkout(workout: Workout): Promise<boolean> {
-        let isSuccess = false;
-      
-
-        let sql = `INSERT INTO Workouts
-                       (Id, Name, ExerciseId)
-                   VALUES (?, ?, ?)`
-
-        try {
-            await this.executeInDb(sql, [workout.id, workout.name, workout.exerciseID]);
-            this.workouts.push(workout);
-            isSuccess = true;
-        } catch (e) {
-            console.log(e)
-            isSuccess = false;
-        }
-
-        return isSuccess
-    }
-
-
 }
