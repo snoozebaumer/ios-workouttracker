@@ -29,7 +29,7 @@ APP.post("/exercise/", (req: Request, res: Response): void => {
 });
 
 APP.put("/exercise/:id", (req: Request, res: Response): void => {
-    console.log(req)
+    console.log(req.body)
     let exercise: Exercise = JSON.parse(req.body.exercise);
     db.update(exercise).then((success) => {
         if (success) {

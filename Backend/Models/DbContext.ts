@@ -2,6 +2,7 @@ import * as mysql from "mysql"
 import {Exercise} from "./Exercise";
 import {Category} from "./Category";
 import {Workout} from "./Workout";
+import {Set} from "./Set";
 import {Connection, OkPacket} from "mysql";
 
 export class DbContext {
@@ -13,6 +14,7 @@ export class DbContext {
     private exercises: Array<Exercise> = new Array<Exercise>();
     private categories: Array<Category> = new Array<Category>();
     private workouts: Array<Workout> = new Array<Workout>();
+    private sets: Array<Set> = new Array<Set>();
     private connection: Connection;
 
     constructor() {
@@ -43,18 +45,7 @@ export class DbContext {
             }
             return new Exercise(value.Id, value.Name, category, value.SizeUnit, value.LengthUnit);
         });
-        
-      
-            
-            
-            
-            
-
-            
-        
-        
-        
-        return this.exercises;
+            return this.exercises;
     }
 
     async save(exercise: Exercise): Promise<boolean> {
@@ -87,8 +78,9 @@ export class DbContext {
         if (!await this.handleCategory(exercise)) {
             return isSuccess;
         }
-
+        let setSql = 'INSERT INTO Sets (Id, HowMuch, HowLong , WorkoutID) VALUES(?, ?, ?, ?)'
         let workoutSql = 'INSERT INTO Workouts (Id, Name, ExerciseID) VALUES(?, ?, ?)'
+        
         for (var w of exercise.workouts){
             let ww: Workout = w
             if((this.workouts.findIndex((value) => value.id == ww.id)==-1)){
@@ -101,8 +93,26 @@ export class DbContext {
                     console.log(e);
                     
                 }
+
             }
+            for (var s of ww.sets){
+                let ss: Set = s
+                if((this.sets.findIndex((value) => value.id == ss.id))==-1){
+                    this.sets.push(ss)
+                    try{
+                        await this.executeInDb(setSql,[ss.id, ss.howmuch, ss.howlong, ss.workoutID])
+                    }
+                    catch (e) {
+                        console.log(e);
+                    }
+                }
+                
+
+            }
+            
         }
+
+
 
         let sql = `UPDATE Exercises
                       SET Name=?, CategoryId=?, SizeUnit=?, LengthUnit=?

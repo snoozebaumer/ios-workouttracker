@@ -32,4 +32,21 @@ CREATE TABLE `WorkoutTracker`.`Exercises` (
                                                   FOREIGN KEY (`ExerciseId`)
                                                       REFERENCES `WorkoutTracker`.`Exercises` (`Id`)
                                                       ON DELETE NO ACTION
-                                                      ON UPDATE NO ACTION);                                             
+                                                      ON UPDATE NO ACTION);
+
+ CREATE TABLE `WorkoutTracker`.`Sets` (
+                                              `Id` VARCHAR(36) NOT NULL,
+                                              `HowMuch` VARCHAR(255) NULL,
+                                              `HowLong` VARCHAR(255) NULL,
+                                              `WorkoutId` VARCHAR(255) NULL,
+                                              PRIMARY KEY (`Id`),
+                                              INDEX `FK_Workout_idx` (`WorkoutId` ASC) VISIBLE,
+                                              CONSTRAINT `FK_Workout`
+                                                  FOREIGN KEY (`WorkoutID`)
+                                                      REFERENCES `WorkoutTracker`.`Workouts` (`Id`)
+                                                      ON DELETE NO ACTION
+                                                      ON UPDATE NO ACTION);                                        
+
+
+
+
