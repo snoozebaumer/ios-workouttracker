@@ -58,6 +58,24 @@ APP.delete("/exercise/:id", (req: Request, res: Response): void => {
     });
 });
 
+APP.delete("/workout/:id", (req: Request, res: Response): void => {
+    let id: string = req.params.id;
+    console.log(id)
+    //Anpassen
+    db.deleteWorkout(id).then((success) => {
+        if (success) {
+            res.status(200).json({
+                message: "Workout deleted successfully!"
+            });
+        } else {
+            res.status(500).json({
+                message: "An error occurred while deleting workout. Please try again later."
+            });
+        }
+    });
+});
+
+
 APP.get("/exercises/", (req: Request, res: Response): void => {
     db.get().then((exercises) => {
         res.status(200).json(exercises);

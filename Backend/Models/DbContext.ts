@@ -4,6 +4,7 @@ import {Category} from "./Category";
 import {Workout} from "./Workout";
 import {Set} from "./Set";
 import {Connection, OkPacket} from "mysql";
+import { isIfStatement } from "typescript";
 
 export class DbContext {
     private dbHost: string = "localhost";
@@ -132,6 +133,26 @@ export class DbContext {
         return isSuccess
     }
 
+    async deleteWorkout(id: string): Promise<boolean> {
+        let isSuccess = false;
+        let sqlDeletion = `DELETE FROM Workouts 
+                    WHERE Id = ?`
+        let result = await this.executeInDb(sqlDeletion, [id]);
+
+        if(result.affectedRows === 0) {
+            isSuccess = false;
+        }
+        else{
+            isSuccess = true;
+        }
+        let index = this.workouts.findIndex((value: Workout) => value.id == id);
+        this.workouts.splice(index, 1);
+
+        return isSuccess;
+
+
+    }
+
     async delete(id: string): Promise<boolean> {
         let sqlCategoryId = `SELECT CategoryId FROM Exercises 
                     WHERE Id = ?`
@@ -149,6 +170,7 @@ export class DbContext {
 
         return await this.tryDeleteCategory(categoryResult[0].CategoryId);
     }
+
 
     async tryDeleteCategory(id: string): Promise<boolean> {
         let sql = `DELETE FROM Categories 
