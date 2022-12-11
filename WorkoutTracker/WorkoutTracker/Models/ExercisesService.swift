@@ -106,6 +106,26 @@ class ExercisesService: ObservableObject {
                 }
                 .resume()
     }
+    
+    static func deleteWorkout(id: UUID) {
+        guard let url = URL(string: "http://localhost:3000/workout/" + id.uuidString)
+        else {
+            return
+        }
+
+        var request = URLRequest(url: url)
+        request.httpMethod = "DELETE"
+        URLSession.shared.dataTask(with: request) {
+                    (data, response, error) in
+                    if let error = error {
+                        print(error)
+                        return
+                    }
+
+                }
+                .resume()
+    }
+    
 }
 
 

@@ -62,7 +62,7 @@ struct ExerciseDetailView: View {
                             }
                             .alert(NSLocalizedString("deletion-confirmation-workout", comment: "Deletion confirmation for Workout"), isPresented: $isPresentingConfirmSetDeletionView) {
                                 Button("delete-workout", role: .destructive) {
-                                    //To-Do: Implement like deleteexercise once server for set is implemented
+                                    ExercisesService.deleteWorkout(id: selectedWorkout!.id)
                                     let index: Int? = exercise.workouts.firstIndex(where: { workout.id == $0.id })
                                     exercise.workouts.remove(at: index!)
                                 }
@@ -87,7 +87,7 @@ struct ExerciseDetailView: View {
                                             var workout = Workout(data: newWorkoutData)
                                             workout.updateExerciseID(from: exercise.id)
                                             let finalWorkout = workout
-                                       
+                                         
                                             exercise.addWorkout(workout: finalWorkout)
                                             Task {
                                                 await exercise.updateWorkout() {
