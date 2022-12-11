@@ -48,7 +48,10 @@ extension Workout {
 
         self.name = convertDateFormatter(date: Date.now)
         self.sets = data.sets
+        sets.indices.forEach{sets[$0].updateWorkoutID(changeWorkoutID: self.id)}
+        
     }
+    
 
     struct Set: Identifiable, Codable, Hashable, Comparable {
         static func <(lhs: Workout.Set, rhs: Workout.Set) -> Bool {
@@ -58,11 +61,13 @@ extension Workout {
         var id: UUID
         var howmuch: Float
         var howlong: Float
+        var workoutID: UUID = UUID()
 
         init(id: UUID = UUID(), howmuch: Float, howlong: Float) {
             self.id = id
             self.howmuch = howmuch
             self.howlong = howlong
+           
         }
 
 
@@ -70,12 +75,20 @@ extension Workout {
             howmuch = changeHowmuch
             howlong = changeHowlong
         }
+        
+        mutating func updateWorkoutID(changeWorkoutID: UUID) {
+            workoutID = changeWorkoutID
+        }
+  
     }
-
+    
+    
 
     struct FormData {
         var sets: [Set] = []
+       
     }
+    
 
     var data: FormData {
         FormData(sets: sets)
@@ -84,6 +97,7 @@ extension Workout {
     mutating func updateExerciseID(from data: UUID) {
         self.exerciseID = data
     }
+    
 }
 
 

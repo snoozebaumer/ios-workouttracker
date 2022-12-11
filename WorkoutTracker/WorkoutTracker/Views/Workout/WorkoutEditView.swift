@@ -73,7 +73,7 @@ struct WorkoutEditView: View {
 
 struct SetEditView_Previews: PreviewProvider {
     static var previews: some View {
-        WorkoutEditView(data: .constant(Workout.sampleData[0].data), sizeUnit: .kg, lengthUnit: .reps)
+        WorkoutEditView(data: .constant(Workout.sampleData[0].data),sizeUnit: .kg, lengthUnit: .reps)
     }
 }
 
