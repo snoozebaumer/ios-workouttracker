@@ -15,7 +15,10 @@ class ExercisesService: ObservableObject {
         else {
             return
         }
-        let encodedData = try! JSONEncoder().encode(exercise)
+        let jsonEnconder = JSONEncoder()
+        //to make apple use ISO standards and not it's own bs date system
+        jsonEnconder.dateEncodingStrategy = .javaScriptISO8601()
+        let encodedData = try! jsonEnconder.encode(exercise)
         let jsonString = String(data: encodedData, encoding: .utf8)
         let postString = "exercise=" + jsonString!
 
@@ -96,14 +99,15 @@ class ExercisesService: ObservableObject {
 
                     if let data = data, data.isEmpty == false {
                         do {
-                            let exercises = try JSONDecoder().decode([Exercise].self, from: data)
+                            let jsonDecoder  = JSONDecoder()
+                            jsonDecoder.dateDecodingStrategy = .javaScriptISO8601()
+                            let exercises = try jsonDecoder.decode([Exercise].self, from: data)
                             completion(.success(exercises))
                         } catch {
                             print(error)
                             completion(.failure(error))
                         }
                     }
-
                 }
                 .resume()
     }
@@ -122,12 +126,9 @@ class ExercisesService: ObservableObject {
                         print(error)
                         return
                     }
-           
-
                 }
                 .resume()
     }
-    
 }
 
 

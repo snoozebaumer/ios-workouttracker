@@ -24,7 +24,7 @@ CREATE TABLE `WorkoutTracker`.`Exercises` (
 
  CREATE TABLE `WorkoutTracker`.`Workouts` (
                                               `Id` VARCHAR(36) NOT NULL,
-                                              `Name` VARCHAR(255) NULL,
+                                              `Name` DATETIME NULL,
                                               `ExerciseId` VARCHAR(255) NULL,
                                               PRIMARY KEY (`Id`),
                                               INDEX `FK_Exercise_idx` (`ExerciseId` ASC) VISIBLE,

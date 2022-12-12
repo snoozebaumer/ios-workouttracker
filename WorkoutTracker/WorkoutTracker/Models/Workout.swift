@@ -10,23 +10,14 @@ import Foundation
 struct Workout: Equatable, Identifiable, Codable {
 
     let id: UUID
-    var name: String
+    var name: Date
     var exerciseID: UUID
     var sets: [Set] = []
 
 
     init(id: UUID = UUID(), sets: [Float] = []) {
         self.id = id
-
-        func convertDateFormatter(date: Date) -> String {
-            let date = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd.MM.yyyy hh:mm" // change format as per needs
-            let result = formatter.string(from: date)
-            return result
-        }
-
-        self.name = convertDateFormatter(date: Date.now)
+        self.name = Date()
         self.exerciseID = UUID()
         self.sets.append(Set(howmuch: sets[0], howlong: sets[1]))
     }
@@ -37,16 +28,7 @@ extension Workout {
     init(id: UUID = UUID(), data: FormData, exerciseID: UUID = UUID()) {
         self.id = id
         self.exerciseID = exerciseID
-
-        func convertDateFormatter(date: Date) -> String {
-            let date = Date()
-            let formatter = DateFormatter()
-            formatter.dateFormat = "dd.MM.yyyy hh:mm" // change format as per needs
-            let result = formatter.string(from: date)
-            return result
-        }
-
-        self.name = convertDateFormatter(date: Date.now)
+        self.name = Date()
         self.sets = data.sets
         sets.indices.forEach{sets[$0].updateWorkoutID(changeWorkoutID: self.id)}
         

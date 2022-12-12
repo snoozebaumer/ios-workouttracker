@@ -41,7 +41,7 @@ export class DbContext {
         let workoutsDb = await this.getWorkouts();
         this.sets = await this.getSets();
 
-        workoutsDb = workoutsDb.map((workout: Workout) => {
+        this.workouts = workoutsDb.map((workout: Workout) => {
             workout.sets = <Set[]>this.sets.filter((set) => {
                 return set.workoutID === workout.id;
             });
@@ -54,7 +54,7 @@ export class DbContext {
                 throw TypeError();
             }
             return new Exercise(value.Id, value.Name, category, value.SizeUnit, value.LengthUnit,
-                <Workout[]>workoutsDb.filter((workout) => {
+                <Workout[]>this.workouts.filter((workout) => {
                 return workout.exerciseID === value.Id;
             }));
         });
@@ -105,7 +105,7 @@ export class DbContext {
         }
 
         let setSql = 'INSERT IGNORE INTO Sets (Id, HowMuch, HowLong , WorkoutID) VALUES(?, ?, ?, ?)'
-        let workoutSql = 'INSERT INTO Workouts (Id, Name, ExerciseID) VALUES(?, ?, ?)'
+        let workoutSql = 'INSERT INTO Workouts (Id, Name, ExerciseID) VALUES(?, FROM_UNIXTIME(?), ?)'
         let deleteSetSql = `DELETE FROM Sets
                             WHERE Id = ?`
 
@@ -113,7 +113,7 @@ export class DbContext {
             if ((this.workouts.findIndex((value) => value.id == workout.id) == -1)) {
                 this.workouts.unshift(workout)
                 try {
-                    await this.executeInDb(workoutSql, [workout.id, workout.name,
+                    await this.executeInDb(workoutSql, [workout.id, new Date(workout.name).getTime() / 1000,
                         workout.exerciseID]);
                 } catch (e) {
                     console.log(e);
@@ -179,10 +179,13 @@ export class DbContext {
         if (isSuccess) {
             let index = this.workouts.findIndex((value: Workout) => value.id == id);
             let deletedWorkout = this.workouts[index];
-            let exerciseIndex = this.exercises.findIndex((exercise) => exercise.id === deletedWorkout.exerciseID);
-            let indexInExercisesWorkouts = this.exercises[exerciseIndex].workouts.findIndex((value: Workout) => value.id == id);
-            this.exercises[exerciseIndex].workouts.splice(indexInExercisesWorkouts, 1);
-            this.sets = this.sets.filter((set) => {return set.workoutID != deletedWorkout.id});
+
+            if (deletedWorkout && this.exercises.length > 0) {
+                let exerciseIndex = this.exercises.findIndex((exercise) => exercise.id === deletedWorkout.exerciseID);
+                let indexInExercisesWorkouts = this.exercises[exerciseIndex].workouts.findIndex((value: Workout) => value.id == id);
+                this.exercises[exerciseIndex].workouts.splice(indexInExercisesWorkouts, 1);
+                this.sets = this.sets.filter((set) => {return set.workoutID != deletedWorkout.id});
+            }
             this.workouts.splice(index, 1);
         }
 
@@ -296,9 +299,10 @@ export class DbContext {
     private async getWorkouts(): Promise<Array<Workout>> {
         return new Promise<Array<Workout>>((resolve, reject) => {
             this.connection.query(`SELECT *
-                                   FROM Workouts`,
+                                   FROM Workouts
+                                   ORDER BY Name DESC`,
                 (err: any, data: Array<{
-                    Id: string, Name: string, ExerciseId: string
+                    Id: string, Name: Date, ExerciseId: string
                 }>) => {
                     if (err) {
                         reject(err);

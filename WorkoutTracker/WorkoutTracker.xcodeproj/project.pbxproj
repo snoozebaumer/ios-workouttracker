@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		193F95B82936410F005DC9A9 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 193F95BA2936410F005DC9A9 /* Localizable.strings */; };
+		1942254529478E3500157590 /* JavaScriptISO8601Formatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1942254429478E3500157590 /* JavaScriptISO8601Formatter.swift */; };
 		196157D72923BCAB0021D7D1 /* WorkoutTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 196157D62923BCAB0021D7D1 /* WorkoutTrackerApp.swift */; };
 		196157DB2923BCAC0021D7D1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 196157DA2923BCAC0021D7D1 /* Assets.xcassets */; };
 		196157DE2923BCAC0021D7D1 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 196157DD2923BCAC0021D7D1 /* Preview Assets.xcassets */; };
@@ -30,6 +31,7 @@
 /* Begin PBXFileReference section */
 		193F95B92936410F005DC9A9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		193F95BB29364116005DC9A9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
+		1942254429478E3500157590 /* JavaScriptISO8601Formatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JavaScriptISO8601Formatter.swift; sourceTree = "<group>"; };
 		196157D32923BCAB0021D7D1 /* WorkoutTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WorkoutTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		196157D62923BCAB0021D7D1 /* WorkoutTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutTrackerApp.swift; sourceTree = "<group>"; };
 		196157DA2923BCAC0021D7D1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -107,6 +109,7 @@
 				19C72494292C0F9400C86947 /* ExercisesService.swift */,
 				19DDF2462939332900E9F518 /* SizeUnit.swift */,
 				19DDF2482939367F00E9F518 /* LengthUnit.swift */,
+				1942254429478E3500157590 /* JavaScriptISO8601Formatter.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 				19943FFB292A90860044C487 /* WorkoutEditView.swift in Sources */,
 				196157EC2923D1050021D7D1 /* ExerciseListItemView.swift in Sources */,
 				19DDF2472939332900E9F518 /* SizeUnit.swift in Sources */,
+				1942254529478E3500157590 /* JavaScriptISO8601Formatter.swift in Sources */,
 				2E43445D29311555000CCF27 /* WorkoutListItemView.swift in Sources */,
 				196157D72923BCAB0021D7D1 /* WorkoutTrackerApp.swift in Sources */,
 				196C74D3293F8FFF00A3A09D /* FilterView.swift in Sources */,

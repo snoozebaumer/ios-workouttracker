@@ -14,8 +14,12 @@ struct WorkoutListItemView: View {
 
     var body: some View {
         VStack {
-            Text(workout.name)
-                    .font(.headline)
+            HStack {
+                Text(workout.name, style: .date)
+                        .font(.headline)
+                Text(workout.name, style: .time)
+                        .font(.headline)
+            }
             VStack {
                 ForEach(workout.sets) { s in
                     HStack {
