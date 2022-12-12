@@ -1,10 +1,10 @@
-
+import {Set} from "./Set";
 
 export class Workout {
     id: string;
     name: string;
     exerciseID: string;
-    sets: []
+    sets: Array<Set>
   
 
     constructor(id: string, name: string, exerciseID: string) {

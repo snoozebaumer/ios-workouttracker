@@ -99,6 +99,7 @@ class ExercisesService: ObservableObject {
                             let exercises = try JSONDecoder().decode([Exercise].self, from: data)
                             completion(.success(exercises))
                         } catch {
+                            print(error)
                             completion(.failure(error))
                         }
                     }

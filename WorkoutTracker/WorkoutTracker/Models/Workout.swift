@@ -34,9 +34,9 @@ struct Workout: Equatable, Identifiable, Codable {
 
 
 extension Workout {
-    init(id: UUID = UUID(), data: FormData) {
+    init(id: UUID = UUID(), data: FormData, exerciseID: UUID = UUID()) {
         self.id = id
-        self.exerciseID = UUID()
+        self.exerciseID = exerciseID
 
         func convertDateFormatter(date: Date) -> String {
             let date = Date()

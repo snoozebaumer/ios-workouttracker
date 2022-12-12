@@ -19,7 +19,7 @@ CREATE TABLE `WorkoutTracker`.`Exercises` (
                                               CONSTRAINT `FK_Category`
                                                   FOREIGN KEY (`CategoryId`)
                                                       REFERENCES `WorkoutTracker`.`Categories` (`Id`)
-                                                      ON DELETE NO ACTION
+                                                      ON DELETE cascade
                                                       ON UPDATE NO ACTION);
 
  CREATE TABLE `WorkoutTracker`.`Workouts` (
@@ -36,8 +36,8 @@ CREATE TABLE `WorkoutTracker`.`Exercises` (
 
  CREATE TABLE `WorkoutTracker`.`Sets` (
                                               `Id` VARCHAR(36) NOT NULL,
-                                              `HowMuch` VARCHAR(255) NULL,
-                                              `HowLong` VARCHAR(255) NULL,
+                                              `HowMuch` FLOAT NULL,
+                                              `HowLong` FLOAT NULL,
                                               `WorkoutId` VARCHAR(255) NULL,
                                               PRIMARY KEY (`Id`),
                                               INDEX `FK_Workout_idx` (`WorkoutId` ASC) VISIBLE,

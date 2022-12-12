@@ -4,7 +4,6 @@ import {Category} from "./Category";
 import {Workout} from "./Workout";
 import {Set} from "./Set";
 import {Connection, OkPacket} from "mysql";
-import { isIfStatement } from "typescript";
 
 export class DbContext {
     private dbHost: string = "localhost";
@@ -12,10 +11,14 @@ export class DbContext {
     private dbPassword: string = "password";
     private dbName: string = "WorkoutTracker";
 
+    // Response Cache
     private exercises: Array<Exercise> = new Array<Exercise>();
     private categories: Array<Category> = new Array<Category>();
+
+    // Delta Comparison Cache
     private workouts: Array<Workout> = new Array<Workout>();
     private sets: Array<Set> = new Array<Set>();
+
     private connection: Connection;
 
     constructor() {
@@ -27,26 +30,35 @@ export class DbContext {
         })
     }
 
-  
+
     async get(): Promise<Array<Exercise>> {
-        
-        if(this.exercises.length > 0) {
+        if (this.exercises.length > 0) {
             return this.exercises;
         }
 
         this.categories = await this.getCategories();
-       // TODO: getWorkouts to be implemented, also get them in reverse order, so last workout is first
-       //get all workouts with foreign key=excercise.id and add them
         let exercisesDb = await this.getExercises();
         let workoutsDb = await this.getWorkouts();
+        this.sets = await this.getSets();
+
+        workoutsDb = workoutsDb.map((workout: Workout) => {
+            workout.sets = <Set[]>this.sets.filter((set) => {
+                return set.workoutID === workout.id;
+            });
+            return workout;
+        })
+
         this.exercises = exercisesDb.map((value) => {
             let category = this.categories.find(c => c.id == value.CategoryId);
             if (!category) {
                 throw TypeError();
             }
-            return new Exercise(value.Id, value.Name, category, value.SizeUnit, value.LengthUnit);
+            return new Exercise(value.Id, value.Name, category, value.SizeUnit, value.LengthUnit,
+                <Workout[]>workoutsDb.filter((workout) => {
+                return workout.exerciseID === value.Id;
+            }));
         });
-            return this.exercises;
+        return this.exercises;
     }
 
     async save(exercise: Exercise): Promise<boolean> {
@@ -75,77 +87,72 @@ export class DbContext {
 
     async update(exercise: Exercise): Promise<boolean> {
         let isSuccess = false;
-        let updatedSets: Array<Set> =[]
+        let updatedSets: Array<Set> = []
         let deltaSets: Array<Set> = []
-        for(var ws of this.workouts){
-            if(ws.exerciseID = exercise.id){
-                for(var ds of this.sets){
-                    if(ds.workoutID = ws.id){
+
+        for (let ws of this.workouts) {
+            if (ws.exerciseID == exercise.id) {
+                for (let ds of this.sets) {
+                    if (ds.workoutID == ws.id) {
                         deltaSets.push(ds)
                     }
-            }  
-           
+                }
             }
         }
-        //console.log(deltaSets)
-        
+
         if (!await this.handleCategory(exercise)) {
             return isSuccess;
         }
-        let setSql = 'INSERT INTO Sets (Id, HowMuch, HowLong , WorkoutID) VALUES(?, ?, ?, ?)'
+
+        let setSql = 'INSERT IGNORE INTO Sets (Id, HowMuch, HowLong , WorkoutID) VALUES(?, ?, ?, ?)'
         let workoutSql = 'INSERT INTO Workouts (Id, Name, ExerciseID) VALUES(?, ?, ?)'
-        let deleteSetSql = `DELETE FROM Sets WHERE Id = ?`
-        
-        for (var w of exercise.workouts){
-            let ww: Workout = w
-            if((this.workouts.findIndex((value) => value.id == ww.id)==-1)){
-                this.workouts.push(ww)
-                try{
-                    await this.executeInDb(workoutSql, [ww.id, ww.name,
-                        ww.exerciseID]);
-                }
-                catch (e) {
+        let deleteSetSql = `DELETE FROM Sets
+                            WHERE Id = ?`
+
+        for (let workout of exercise.workouts) {
+            if ((this.workouts.findIndex((value) => value.id == workout.id) == -1)) {
+                this.workouts.unshift(workout)
+                try {
+                    await this.executeInDb(workoutSql, [workout.id, workout.name,
+                        workout.exerciseID]);
+                } catch (e) {
                     console.log(e);
-                    
                 }
             }
-            for (var s of ww.sets){
-                let ss: Set = s
-                updatedSets.push(ss)
-                if((this.sets.findIndex((value) => value.id == ss.id))==-1){
-                    this.sets.push(ss)
-                    try{
-                        await this.executeInDb(setSql,[ss.id, ss.howmuch, ss.howlong, ss.workoutID])
-                    }
-                    catch (e) {
+
+            for (let set of workout.sets) {
+                updatedSets.push(set)
+                if ((this.sets.findIndex((value) => value.id == set.id)) == -1) {
+                    this.sets.push(set)
+                    try {
+                        await this.executeInDb(setSql, [set.id, set.howmuch, set.howlong, set.workoutID])
+                    } catch (e) {
                         console.log(e);
                     }
                 }
-                
-       
             }
-            
         }
-        for(var d of deltaSets){
-            if((updatedSets.findIndex((value) => value.id == d.id))==-1){
-                let index = this.sets.findIndex((value: Set) => value.id == d.id);
+
+        for (let deltaSet of deltaSets) {
+            if ((updatedSets.findIndex((value) => value.id == deltaSet.id)) == -1) {
+                let index = this.sets.findIndex((value: Set) => value.id == deltaSet.id);
                 this.sets.splice(index, 1);
-                console.log(d)
-                try{
-                    await this.executeInDb(deleteSetSql, [d.id]);
-                }
-                catch (e) {
+                try {
+                    await this.executeInDb(deleteSetSql, [deltaSet.id]);
+                } catch (e) {
                     console.log(e);
-                    
+
                 }
             }
         }
 
-        
 
         let sql = `UPDATE Exercises
-                      SET Name=?, CategoryId=?, SizeUnit=?, LengthUnit=?
-                      WHERE Id=?;`
+                   SET Name=?,
+                       CategoryId=?,
+                       SizeUnit=?,
+                       LengthUnit=?
+                   WHERE Id = ?;`
 
         try {
             await this.executeInDb(sql, [exercise.name, exercise.category.id,
@@ -162,34 +169,38 @@ export class DbContext {
     }
 
     async deleteWorkout(id: string): Promise<boolean> {
-        let isSuccess = false;
-        let sqlDeletion = `DELETE FROM Workouts 
-                    WHERE Id = ?`
+        let sqlDeletion = `DELETE
+                           FROM Workouts
+                           WHERE Id = ?`
         let result = await this.executeInDb(sqlDeletion, [id]);
 
-        if(result.affectedRows === 0) {
-            isSuccess = false;
+        let isSuccess = result.affectedRows !== 0;
+
+        if (isSuccess) {
+            let index = this.workouts.findIndex((value: Workout) => value.id == id);
+            let deletedWorkout = this.workouts[index];
+            let exerciseIndex = this.exercises.findIndex((exercise) => exercise.id === deletedWorkout.exerciseID);
+            let indexInExercisesWorkouts = this.exercises[exerciseIndex].workouts.findIndex((value: Workout) => value.id == id);
+            this.exercises[exerciseIndex].workouts.splice(indexInExercisesWorkouts, 1);
+            this.sets = this.sets.filter((set) => {return set.workoutID != deletedWorkout.id});
+            this.workouts.splice(index, 1);
         }
-        else{
-            isSuccess = true;
-        }
-        let index = this.workouts.findIndex((value: Workout) => value.id == id);
-        this.workouts.splice(index, 1);
 
         return isSuccess;
-
     }
 
     async delete(id: string): Promise<boolean> {
-        let sqlCategoryId = `SELECT CategoryId FROM Exercises 
-                    WHERE Id = ?`
+        let sqlCategoryId = `SELECT CategoryId
+                             FROM Exercises
+                             WHERE Id = ?`
         let categoryResult = await this.executeInDb(sqlCategoryId, [id]);
 
-        let sqlDeletion = `DELETE FROM Exercises 
-                    WHERE Id = ?`
+        let sqlDeletion = `DELETE
+                           FROM Exercises
+                           WHERE Id = ?`
         let result = await this.executeInDb(sqlDeletion, [id]);
 
-        if(result.affectedRows === 0) {
+        if (result.affectedRows === 0) {
             throw Error();
         }
         let index = this.exercises.findIndex((value: Exercise) => value.id == id);
@@ -198,16 +209,14 @@ export class DbContext {
         return await this.tryDeleteCategory(categoryResult[0].CategoryId);
     }
 
-
     async tryDeleteCategory(id: string): Promise<boolean> {
-        let sql = `DELETE FROM Categories 
-                    WHERE Id = ? AND Id not IN 
-                    (
-                        SELECT  CategoryId 
-                        FROM    Exercises
-                    )`
+        let sql = `DELETE FROM Categories
+                   WHERE Id = ?
+                     AND Id not IN
+                         (SELECT CategoryId
+                          FROM Exercises)`
 
-        let result = await this.executeInDb(sql,[id]);
+        let result = await this.executeInDb(sql, [id]);
         return !(result.affectedRows === 0); //have to do this rather than > 0 as type wasn't compared that way
     }
 
@@ -234,7 +243,6 @@ export class DbContext {
         return isSuccess;
     }
 
-
     private async executeInDb(sql: string, values: Array<any>): Promise<OkPacket | any> {
         return new Promise<OkPacket>((resolve, reject) => {
             this.connection.query(sql, values, function (err: any, data: OkPacket | any) {
@@ -249,25 +257,29 @@ export class DbContext {
 
     private async getCategories(): Promise<Array<Category>> {
         return new Promise<Array<Category>>((resolve, reject) => {
-            this.connection.query(`SELECT * FROM Categories`,
-                function (err: any, data: Array<{Id: string, Name: string}>) {
-                if (err) {
-                    reject(err);
-                } else {
-                    let categoryList: Array<Category> = data.map(value => {
-                        return new Category(value.Id, value.Name);
-                    })
-                    resolve(categoryList);
-                }
-            });
+            this.connection.query(`SELECT *
+                                   FROM Categories`,
+                function (err: any, data: Array<{ Id: string, Name: string }>) {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        let categoryList: Array<Category> = data.map(value => {
+                            return new Category(value.Id, value.Name);
+                        })
+                        resolve(categoryList);
+                    }
+                });
         });
     }
 
-    private async getExercises(): Promise<Array<{Id: string, Name: string, CategoryId: String,
-                                                SizeUnit: number, LengthUnit: number}>> {
-        return new Promise<Array<{Id: string, Name: string, CategoryId: String,
-            SizeUnit: number, LengthUnit: number}>>((resolve, reject) => {
-            this.connection.query(`SELECT * FROM Exercises`,
+    private async getExercises(): Promise<Array<{
+        Id: string, Name: string, CategoryId: String,
+        SizeUnit: number, LengthUnit: number }>> {
+        return new Promise<Array<{
+            Id: string, Name: string, CategoryId: String,
+            SizeUnit: number, LengthUnit: number }>>((resolve, reject) => {
+            this.connection.query(`SELECT *
+                                   FROM Exercises`,
                 (err: any, data: Array<{
                     Id: string, Name: string, CategoryId: String,
                     SizeUnit: number, LengthUnit: number
@@ -281,22 +293,41 @@ export class DbContext {
         });
     }
 
-    private async getWorkouts(): Promise<Array<{Id: string, Name: string, ExerciseId: String
-                                               }>> {
-        return new Promise<Array<{Id: string, Name: string, ExerciseId: String
-            }>>((resolve, reject) => {
-            this.connection.query(`SELECT * FROM Workouts`,
+    private async getWorkouts(): Promise<Array<Workout>> {
+        return new Promise<Array<Workout>>((resolve, reject) => {
+            this.connection.query(`SELECT *
+                                   FROM Workouts`,
                 (err: any, data: Array<{
-                    Id: string, Name: string, ExerciseId: String
+                    Id: string, Name: string, ExerciseId: string
                 }>) => {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(data);
+                        let workouts: Array<Workout> = data.map((value) => {
+                            return new Workout(value.Id, value.Name, value.ExerciseId);
+                        });
+                        resolve(workouts);
                     }
                 });
         });
     }
 
-
+    private async getSets(): Promise<Array<Set>> {
+        return new Promise<Array<Set>>((resolve, reject) => {
+            this.connection.query(`SELECT *
+                                   FROM Sets`,
+                (err: any, data: Array<{
+                    Id: string, HowMuch: number, HowLong: number, WorkoutId: string
+                }>) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        let sets: Array<Set> = data.map((value) => {
+                            return new Set(value.Id, value.HowMuch, value.HowLong, value.WorkoutId);
+                        });
+                        resolve(sets);
+                    }
+                });
+        });
+    }
 }

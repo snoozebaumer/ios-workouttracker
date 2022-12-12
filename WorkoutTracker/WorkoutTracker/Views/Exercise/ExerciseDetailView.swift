@@ -62,19 +62,11 @@ struct ExerciseDetailView: View {
                             }
                             .alert(NSLocalizedString("deletion-confirmation-workout", comment: "Deletion confirmation for Workout"), isPresented: $isPresentingConfirmSetDeletionView) {
                                 Button("delete-workout", role: .destructive) {
-                                    ExercisesService.deleteWorkout(id: workout.id)
-                                    let index: Int? = exercise.workouts.firstIndex(where: { workout.id == $0.id })
+                                    ExercisesService.deleteWorkout(id: selectedWorkout!.id)
+                                    let index: Int? = exercise.workouts.firstIndex(where: { selectedWorkout!.id == $0.id })
                                     exercise.workouts.remove(at: index!)
                                     isPresentingConfirmSetDeletionView = false
                                     selectedWorkout = nil
-                                        
-                                    
-                                    
-                                    
-                                
-                                    
-                                
-                                    
                                 }
                             }
                 }
@@ -94,24 +86,22 @@ struct ExerciseDetailView: View {
                                     }
                                     ToolbarItem(placement: .confirmationAction) {
                                         Button("add") {
-                                            var workout = Workout(data: newWorkoutData)
-                                            workout.updateExerciseID(from: exercise.id)
-                                            let finalWorkout = workout
-                                         
-                                            exercise.addWorkout(workout: finalWorkout)
                                             Task {
+                                                let workout = Workout(data: newWorkoutData, exerciseID: exercise.id)
+                                                exercise.addWorkout(workout: workout)
                                                 await exercise.updateWorkout() {
                                                     isSuccess in
                                                     if (isSuccess) {
                                                         isPresentingNewWorkoutView = false
                                                     } else {
+                                                        DispatchQueue.main.async {
+                                                            exercise.removeWorkout(workout: workout)
+                                                        }
                                                         errorInNewWorkoutView = true
                                                     }
                                                 }
+                                                newWorkoutData = Workout.FormData()
                                             }
-                                            newWorkoutData = Workout.FormData()
-                                   
-
                                         }
                                     }
                                 }

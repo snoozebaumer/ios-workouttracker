@@ -3,7 +3,6 @@ import {Request, Response, Application} from "express";
 import express from "express";
 import {Exercise} from "./Models/Exercise";
 import {DbContext} from "./Models/DbContext";
-import {Workout} from "./Models/Workout";
 import * as bodyParser from "body-parser";
 
 const PORT = 3000;
@@ -29,7 +28,6 @@ APP.post("/exercise/", (req: Request, res: Response): void => {
 });
 
 APP.put("/exercise/:id", (req: Request, res: Response): void => {
-    console.log(req.body)
     let exercise: Exercise = JSON.parse(req.body.exercise);
     db.update(exercise).then((success) => {
         if (success) {
@@ -46,7 +44,7 @@ APP.put("/exercise/:id", (req: Request, res: Response): void => {
 
 APP.delete("/exercise/:id", (req: Request, res: Response): void => {
     let id: string = req.params.id;
-    console.log(id)
+
     db.delete(id).then((categoryIncluded) => {
         res.status(200).json({
             categoryIncluded: categoryIncluded
@@ -60,8 +58,7 @@ APP.delete("/exercise/:id", (req: Request, res: Response): void => {
 
 APP.delete("/workout/:id", (req: Request, res: Response): void => {
     let id: string = req.params.id;
-    console.log(id)
-    //Anpassen
+
     db.deleteWorkout(id).then((success) => {
         if (success) {
             res.status(200).json({
