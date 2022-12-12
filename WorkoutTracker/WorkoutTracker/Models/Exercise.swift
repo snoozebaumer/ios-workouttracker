@@ -56,6 +56,7 @@ struct Exercise: Identifiable, Codable {
             var workout = workouts[index]
             workouts.remove(at: index)
             workout.sets = data.sets
+            workout.sets.indices.forEach{workout.sets[$0].updateWorkoutID(changeWorkoutID: workout.id)}
             workouts.insert(workout, at: index)
         }
     }

@@ -154,6 +154,16 @@ struct ExerciseDetailView: View {
                                             exercise.changeWorkout(id: changeWorkoutId!, data: changeWorkoutData)
                                             changeWorkoutId = nil
                                             isPresentingWorkoutEditView = false
+                                            Task {
+                                                await exercise.updateWorkout() {
+                                                    isSuccess in
+                                                    if (isSuccess) {
+                                                        isPresentingNewWorkoutView = false
+                                                    } else {
+                                                        errorInNewWorkoutView = true
+                                                    }
+                                                }
+                                            }
                                         }
                                     }
                                 }
