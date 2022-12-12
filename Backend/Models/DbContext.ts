@@ -75,12 +75,26 @@ export class DbContext {
 
     async update(exercise: Exercise): Promise<boolean> {
         let isSuccess = false;
-
+        let updatedSets: Array<Set> =[]
+        let deltaSets: Array<Set> = []
+        for(var ws of this.workouts){
+            if(ws.exerciseID = exercise.id){
+                for(var ds of this.sets){
+                    if(ds.workoutID = ws.id){
+                        deltaSets.push(ds)
+                    }
+            }  
+           
+            }
+        }
+        //console.log(deltaSets)
+        
         if (!await this.handleCategory(exercise)) {
             return isSuccess;
         }
         let setSql = 'INSERT INTO Sets (Id, HowMuch, HowLong , WorkoutID) VALUES(?, ?, ?, ?)'
         let workoutSql = 'INSERT INTO Workouts (Id, Name, ExerciseID) VALUES(?, ?, ?)'
+        let deleteSetSql = `DELETE FROM Sets WHERE Id = ?`
         
         for (var w of exercise.workouts){
             let ww: Workout = w
@@ -94,10 +108,10 @@ export class DbContext {
                     console.log(e);
                     
                 }
-
             }
             for (var s of ww.sets){
                 let ss: Set = s
+                updatedSets.push(ss)
                 if((this.sets.findIndex((value) => value.id == ss.id))==-1){
                     this.sets.push(ss)
                     try{
@@ -108,12 +122,26 @@ export class DbContext {
                     }
                 }
                 
-
+       
             }
             
         }
+        for(var d of deltaSets){
+            if((updatedSets.findIndex((value) => value.id == d.id))==-1){
+                let index = this.sets.findIndex((value: Set) => value.id == d.id);
+                this.sets.splice(index, 1);
+                console.log(d)
+                try{
+                    await this.executeInDb(deleteSetSql, [d.id]);
+                }
+                catch (e) {
+                    console.log(e);
+                    
+                }
+            }
+        }
 
-
+        
 
         let sql = `UPDATE Exercises
                       SET Name=?, CategoryId=?, SizeUnit=?, LengthUnit=?
@@ -149,7 +177,6 @@ export class DbContext {
         this.workouts.splice(index, 1);
 
         return isSuccess;
-
 
     }
 
@@ -206,6 +233,7 @@ export class DbContext {
 
         return isSuccess;
     }
+
 
     private async executeInDb(sql: string, values: Array<any>): Promise<OkPacket | any> {
         return new Promise<OkPacket>((resolve, reject) => {
