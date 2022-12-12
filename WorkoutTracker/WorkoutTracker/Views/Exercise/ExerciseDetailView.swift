@@ -62,9 +62,19 @@ struct ExerciseDetailView: View {
                             }
                             .alert(NSLocalizedString("deletion-confirmation-workout", comment: "Deletion confirmation for Workout"), isPresented: $isPresentingConfirmSetDeletionView) {
                                 Button("delete-workout", role: .destructive) {
-                                    ExercisesService.deleteWorkout(id: selectedWorkout!.id)
+                                    ExercisesService.deleteWorkout(id: workout.id)
                                     let index: Int? = exercise.workouts.firstIndex(where: { workout.id == $0.id })
                                     exercise.workouts.remove(at: index!)
+                                    isPresentingConfirmSetDeletionView = false
+                                    selectedWorkout = nil
+                                        
+                                    
+                                    
+                                    
+                                
+                                    
+                                
+                                    
                                 }
                             }
                 }

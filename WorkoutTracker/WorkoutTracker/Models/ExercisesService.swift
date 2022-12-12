@@ -107,7 +107,7 @@ class ExercisesService: ObservableObject {
                 .resume()
     }
     
-    static func deleteWorkout(id: UUID) {
+    static func deleteWorkout(id: UUID){
         guard let url = URL(string: "http://localhost:3000/workout/" + id.uuidString)
         else {
             return
@@ -121,6 +121,7 @@ class ExercisesService: ObservableObject {
                         print(error)
                         return
                     }
+           
 
                 }
                 .resume()
