@@ -6,16 +6,16 @@ import {Set} from "./Set";
 import {Connection, OkPacket} from "mysql";
 
 export class DbContext {
-    private dbHost: string = "localhost";
-    private dbUsername: string = "root";
-    private dbPassword: string = "password";
-    private dbName: string = "WorkoutTracker";
+    readonly DB_HOST: string = "localhost";
+    readonly DB_USERNAME: string = "root"; //change to your sql user
+    readonly DB_PASSWORD: string = "password"; //change to your sql user password
+    readonly DB_SCHEMA_NAME: string = "WorkoutTracker";
 
     // Response Cache
     private exercises: Array<Exercise> = new Array<Exercise>();
-    private categories: Array<Category> = new Array<Category>();
 
     // Delta Comparison Cache
+    private categories: Array<Category> = new Array<Category>();
     private workouts: Array<Workout> = new Array<Workout>();
     private sets: Array<Set> = new Array<Set>();
 
@@ -23,10 +23,10 @@ export class DbContext {
 
     constructor() {
         this.connection = mysql.createConnection({
-            host: this.dbHost,
-            user: this.dbUsername,
-            password: this.dbPassword,
-            database: this.dbName
+            host: this.DB_HOST,
+            user: this.DB_USERNAME,
+            password: this.DB_PASSWORD,
+            database: this.DB_SCHEMA_NAME
         })
     }
 
