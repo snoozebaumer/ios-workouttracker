@@ -1,5 +1,5 @@
 # WorkoutTracker
-WorkoutTracker is an IOS group project completed as part of IOS development lecture at HSLU.
+WorkoutTracker is an IOS group project completed as part of IOS development lecture at HSLU 3rd semester.
 ## Setup
 The backend component uses [node.js](https://nodejs.org/en/) with a mysql database connection.
 
