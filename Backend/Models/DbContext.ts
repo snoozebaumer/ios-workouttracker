@@ -7,8 +7,8 @@ import {Connection, OkPacket} from "mysql";
 
 export class DbContext {
     readonly DB_HOST: string = "localhost";
-    readonly DB_USERNAME: string = "root"; //change to your sql user
-    readonly DB_PASSWORD: string = "password"; //change to your sql user password
+    readonly DB_USERNAME: string = "<USERNAME>"; //change to your sql user
+    readonly DB_PASSWORD: string = "<PASSWORD>"; //change to your sql user password
     readonly DB_SCHEMA_NAME: string = "WorkoutTracker";
 
     // Response Cache
